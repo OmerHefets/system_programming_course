@@ -1,3 +1,5 @@
+#include <stdio.h>
+#include <string.h>
 #define MAXSTRING 100
 
 void f_sequence(char line[]);

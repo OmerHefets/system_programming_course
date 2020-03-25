@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include "f_sequence.h"
 
 int main()

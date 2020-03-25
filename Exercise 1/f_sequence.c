@@ -1,5 +1,3 @@
-#include <stdio.h>
-#include <string.h>
 #include "f_sequence.h"
 
 enum kind_of_sequence {STRICTLY_INCREASING, INCREASING, STRICTLY_DECREASING, DECREASING, NO_ORDER};
