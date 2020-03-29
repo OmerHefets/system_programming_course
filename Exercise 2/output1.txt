@@ -1,0 +1,58 @@
+Please enter the values for the adjacency matrix. the Matrix is a 11x11 matrix, with values 0 / 1.
+Therefore, insert 11 values in each row, seperated with space in between and finish the row with newline:
+The resulted matrix is:
+        0       1       2       3       4       5       6       7       8       9       10
+
+0       0       0       0       0       1       1       0       1       0       1       1
+1       0       0       0       0       0       0       0       0       0       0       0
+2       0       1       0       0       0       0       0       0       0       0       0
+3       0       0       0       0       0       0       0       0       0       0       0
+4       0       0       0       0       0       0       0       0       0       0       0
+5       0       0       0       0       0       0       0       0       0       0       0
+6       1       0       1       0       0       0       0       0       1       0       0
+7       0       0       0       0       0       0       0       0       0       0       0
+8       0       0       0       1       0       0       0       0       0       0       0
+9       0       0       0       0       0       0       0       0       0       0       0
+10      0       0       0       0       0       0       0       0       0       0       0
+Please insert two indexes of nodes in tree, to check for path from the first node to the second one (-1 and -1 to exit):
+The first index is: 6
+The second index is: 1
+And there IS a path from 6 to 1, as the value is TRUE
+
+Please insert two indexes of nodes in tree, to check for path from the first node to the second one (-1 and -1 to exit):
+The first index is: 0
+The second index is: 9
+And there IS a path from 0 to 9, as the value is TRUE
+
+Please insert two indexes of nodes in tree, to check for path from the first node to the second one (-1 and -1 to exit):
+The first index is: 2
+The second index is: 10
+And there ISN'T a path from 2 to 10, as the value is FALSE
+
+Please insert two indexes of nodes in tree, to check for path from the first node to the second one (-1 and -1 to exit):
+The first index is: 1
+The second index is: 2
+And there ISN'T a path from 1 to 2, as the value is FALSE
+
+Please insert two indexes of nodes in tree, to check for path from the first node to the second one (-1 and -1 to exit):
+The first index is: 6
+The second index is: 3
+And there IS a path from 6 to 3, as the value is TRUE
+
+Please insert two indexes of nodes in tree, to check for path from the first node to the second one (-1 and -1 to exit):
+The first index is: 2
+The second index is: 1
+And there IS a path from 2 to 1, as the value is TRUE
+
+Please insert two indexes of nodes in tree, to check for path from the first node to the second one (-1 and -1 to exit):
+The first index is: 0
+The second index is: 5
+And there IS a path from 0 to 5, as the value is TRUE
+
+Please insert two indexes of nodes in tree, to check for path from the first node to the second one (-1 and -1 to exit):
+The first index is: 8
+The second index is: 4
+And there ISN'T a path from 8 to 4, as the value is FALSE
+
+Please insert two indexes of nodes in tree, to check for path from the first node to the second one (-1 and -1 to exit):
+You entered values -1 and -1 to exit the program.
