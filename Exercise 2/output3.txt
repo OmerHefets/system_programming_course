@@ -1,0 +1,35 @@
+Please enter the values for the adjacency matrix. the Matrix is a 3x3 matrix, with values 0 / 1.
+Therefore, insert 3 values in each row, seperated with space in between and finish the row with newline:
+The resulted matrix is:
+        0       1       2
+
+0       0       1       0
+1       0       0       1
+2       0       0       0
+Please insert two indexes of nodes in tree, to check for path from the first node to the second one (-1 and -1 to exit):
+The first index is: 0
+The second index is: 1
+And there IS a path from 0 to 1, as the value is TRUE
+
+Please insert two indexes of nodes in tree, to check for path from the first node to the second one (-1 and -1 to exit):
+The first index is: 0
+The second index is: 2
+And there IS a path from 0 to 2, as the value is TRUE
+
+Please insert two indexes of nodes in tree, to check for path from the first node to the second one (-1 and -1 to exit):
+The first index is: 1
+The second index is: 2
+And there IS a path from 1 to 2, as the value is TRUE
+
+Please insert two indexes of nodes in tree, to check for path from the first node to the second one (-1 and -1 to exit):
+The first index is: 2
+The second index is: 1
+And there ISN'T a path from 2 to 1, as the value is FALSE
+
+Please insert two indexes of nodes in tree, to check for path from the first node to the second one (-1 and -1 to exit):
+The first index is: 2
+The second index is: 0
+And there ISN'T a path from 2 to 0, as the value is FALSE
+
+Please insert two indexes of nodes in tree, to check for path from the first node to the second one (-1 and -1 to exit):
+You entered values -1 and -1 to exit the program.
