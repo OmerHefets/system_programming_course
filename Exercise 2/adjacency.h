@@ -1,5 +1,5 @@
 /* define the size of the 2d-array */
-#define N 3
+#define N 11
 /* define values for TRUE and FALSE for the path function to return */
 #define TRUE 1
 #define FALSE 0
