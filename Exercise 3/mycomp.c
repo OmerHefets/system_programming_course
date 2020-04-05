@@ -10,6 +10,16 @@ int main()
     char arg2[MAX_COMMAND_LINE];
     char arg3[MAX_COMMAND_LINE];
     char *no_white, *after_func, *after_arg;
+    complex A, B, C, D, E, F;
+    complex *complex_pointers[COMPLEX_NUMBER];
+    complex_pointers[0] = &A;
+    complex_pointers[1] = &B;
+    complex_pointers[2] = &C;
+    complex_pointers[3] = &D;
+    complex_pointers[4] = &E;
+    complex_pointers[5] = &F;
+    reset_complexes(complex_pointers, COMPLEX_NUMBER);
+    printf("\nlel %.2f %.2f lel\n", A.real, A.img);
     while(fgets(command_line, MAX_COMMAND_LINE, stdin) != NULL) {
             if (strcmp(command_line, "stop") == 0) {
                 printf("\nstop!!!!\n.");
@@ -30,10 +40,13 @@ int main()
             printf("second arg length: %lu\n", strlen(arg2));
             printf("third arg: %s\n", arg3);
             printf("third arg length: %lu\n", strlen(arg3));
-            printf("validate first arg: %d\n", validate_complex(arg1, TRUE));
-            printf("validate second arg: %d\n", validate_double(arg2, TRUE));
-            printf("validate third arg: %d\n", validate_complex(arg3, FALSE));
-            printf("number of  arguments: %d", check_num_of_args_and_commas(after_func));
+            printf("validate first arg: %d\n", validate_complex(arg1));
+            printf("validate second arg: %d\n", validate_double(arg2));
+            printf("validate third arg: %d\n", validate_complex(arg3));
+            printf("number of  arguments: %d\n", check_num_of_args_and_commas(after_func));
+            printf("validation read comp: %d\n", validate_read_abs_comp(after_func));
+            execute_read_comp(after_func, complex_pointers);
+            printf("\nlel %.2f %.2f lel\n", A.real, A.img);
     }
     if (fgets(command_line, MAX_COMMAND_LINE, stdin) == NULL) {
         printf("\nerror. no stopping.\n");
