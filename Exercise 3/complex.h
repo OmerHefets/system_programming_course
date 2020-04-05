@@ -27,15 +27,28 @@ char* pass_white_chars_and_commas(char *s);
 char* read_argument(char *s, char arg[MAX_COMMAND_LINE], int skip_commas);
 void read_function(char *s, char command_name[MAX_COMMAND_LINE]);
 int check_num_of_args_and_commas(char *s);
-int validate_command_and_execute(char *s, char command_name[MAX_COMMAND_LINE]);
+int validate_command_and_execute(char *s, complex **pointers_array, char command_name[MAX_COMMAND_LINE]);
 int validate_number_of_args_and_commas(int args_num, char *s);
 int validate_double(char *s);
 int validate_complex(char *s);
-int validate_read_abs_comp(char *s);
-int validate_print_comp(char *s);
+int validate_read_comp(char *s);
+int validate_print_abs_comp(char *s);
 int validate_add_sub_mult_comp(char *s);
 int validate_mult_real_and_img(char *s);
 int validate_stop(char *s);
 void execute_read_comp(char *s, complex **pointers_array);
+void execute_print_abs_comp(char *s, complex **pointers_array, char command_name[MAX_COMMAND_LINE]);
+void execute_add_sub_mult_comp(char *s, complex **pointers_array, char command_name[MAX_COMMAND_LINE]);
+void execute_mult_real_and_img(char *s, complex **pointers_array, char command_name[MAX_COMMAND_LINE]);
+
 void reset_complexes(complex **pointers_array, int array_size);
 void read_complex(complex *number, double real_value, double img_value);
+void print_complex(complex *number);
+
+
+void add_complex_numbers(complex *z, complex *w);
+void sub_complex_numbers(complex *z, complex *w);
+void multiply_complex_real(complex *z, double real_number);
+void multiply_complex_img(complex *z, double img_number);
+void multiply_complexes(complex *z, complex *w);
+void abs_of_complex(complex *z);

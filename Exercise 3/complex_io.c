@@ -2,6 +2,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdlib.h>
+#include <math.h>
 #include "complex.h"
 
 char* pass_white_chars(char *s)
@@ -78,34 +79,49 @@ int check_num_of_args_and_commas(char *s)
 }
 
 
-int validate_command_and_execute(char *s, char command_name[MAX_COMMAND_LINE])
+int validate_command_and_execute(char *s, complex **pointers_array, char command_name[MAX_COMMAND_LINE])
 {
     if (strcmp(command_name, "read_comp") == 0) {
-        /*
-        validate_read_comp();
-        execute_read_comp();
-        */
+        if (validate_read_comp(s)) {
+            execute_read_comp(s, pointers_array);
+        }
     } else if (strcmp(command_name, "print_comp") == 0) {
-        ;
+        if (validate_print_abs_comp(s)) {
+            execute_print_abs_comp(s, pointers_array, command_name);
+        }
     } else if (strcmp(command_name, "add_comp") == 0) {
-        ;
+        if (validate_add_sub_mult_comp(s)) {
+            execute_add_sub_mult_comp(s, pointers_array, command_name);
+        }
     } else if (strcmp(command_name, "sub_comp") == 0) {
-        ;
+        if (validate_add_sub_mult_comp(s)) {
+            execute_add_sub_mult_comp(s, pointers_array, command_name);
+        } 
     } else if (strcmp(command_name, "mult_comp_real") == 0) {
-        ;
+        if (validate_mult_real_and_img(s)) {
+            execute_mult_real_and_img(s, pointers_array, command_name);
+        }
     } else if (strcmp(command_name, "mult_comp_img") == 0) {
-        ;
+        if (validate_mult_real_and_img(s)) {
+            execute_mult_real_and_img(s, pointers_array, command_name);
+        } 
     } else if (strcmp(command_name, "mult_comp_comp") == 0) {
-        ;
+        if (validate_add_sub_mult_comp(s)) {
+            execute_add_sub_mult_comp(s, pointers_array, command_name);
+        }
     } else if (strcmp(command_name, "abs_comp") == 0) {
-        ;
+        if (validate_print_abs_comp(s)) {
+            execute_print_abs_comp(s, pointers_array, command_name);
+        } 
     } else if (strcmp(command_name, "stop") == 0) {
-        ;
+        if (validate_stop(s)) {
+            return FALSE;
+        }
     } else {
         printf("invalid function name.\n");
-        return INVALID;
+        return TRUE;
     }
-    return 0;
+    return TRUE;
 }
 
 int validate_number_of_args_and_commas(int args_num, char *s)
@@ -140,6 +156,7 @@ int validate_double(char *s)
                 decimal_seperator = TRUE;
             }
             else {
+                printf("Invalid parameter - not a decimal number.\n");
                 return INVALID;
             }
         }
@@ -157,13 +174,14 @@ int validate_complex(char *s)
         return INVALID;
     } else if (arg_length == 1) {
         if (s[0] != 'A' && s[0] != 'B' && s[0] != 'C' && s[0] != 'D' && s[0] != 'E' && s[0] != 'F') {
+            printf("Invalid parameter - not a defined complex number.\n");
             return INVALID;
         }
     }
     return VALID;
 }
 
-int validate_read_abs_comp(char *s)
+int validate_read_comp(char *s)
 {
     char arg1[MAX_COMMAND_LINE];
     char arg2[MAX_COMMAND_LINE];
@@ -181,7 +199,7 @@ int validate_read_abs_comp(char *s)
     return INVALID;
 }
 
-int validate_print_comp(char *s)
+int validate_print_abs_comp(char *s)
 {
     char arg1[MAX_COMMAND_LINE];
     char *p = s;
@@ -229,8 +247,8 @@ int validate_mult_real_and_img(char *s)
 
 int validate_stop(char *s)
 {
-    if (!validate_number_of_args_and_commas(STOP_NUM_ARGS, s)) {
-        printf("boom.");
+    if (*s != '\n' || *s != '\0' || *s != EOF || s != NULL) {
+        printf("Extraneous text after stop command.\n");
         return INVALID;
     }
     return VALID;
@@ -250,6 +268,57 @@ void execute_read_comp(char *s, complex **pointers_array)
     read_complex(pointers_array[complex_index], atof(arg2), atof(arg3));
 }
 
+void execute_print_abs_comp(char *s, complex **pointers_array, char command_name[MAX_COMMAND_LINE])
+{
+    int complex_index;
+    char arg1[COMPLEX_LENGTH];
+    char *p = s;
+    p = read_argument(p, arg1, TRUE);
+    complex_index = arg1[0] - A_ASCII_VALUE;
+    if (strcmp(command_name, "print_comp") == 0) {
+        print_complex(pointers_array[complex_index]);
+    } else if (strcmp(command_name, "abs_comp") == 0) {
+        abs_of_complex(pointers_array[complex_index]);
+    }
+
+}
+
+void execute_add_sub_mult_comp(char *s, complex **pointers_array, char command_name[MAX_COMMAND_LINE])
+{
+    int complex_index1, complex_index2;
+    char arg1[COMPLEX_LENGTH];
+    char arg2[COMPLEX_LENGTH];
+    char *p = s;
+    p = read_argument(p, arg1, TRUE);
+    p = read_argument(p, arg2, TRUE);
+    complex_index1 = arg1[0] - A_ASCII_VALUE;
+    complex_index2 = arg2[0] - A_ASCII_VALUE;
+    if (strcmp(command_name, "add_comp") == 0) {
+        add_complex_numbers(pointers_array[complex_index1], pointers_array[complex_index2]);
+    } else if (strcmp(command_name, "sub_comp") == 0) {
+        sub_complex_numbers(pointers_array[complex_index1], pointers_array[complex_index2]);
+    } else if (strcmp(command_name, "mult_comp_comp") == 0) {
+        multiply_complexes(pointers_array[complex_index1], pointers_array[complex_index2]);
+    }
+}
+
+void execute_mult_real_and_img(char *s, complex **pointers_array, char command_name[MAX_COMMAND_LINE])
+{
+    int complex_index;
+    char arg1[COMPLEX_LENGTH];
+    char arg2[MAX_COMMAND_LINE];
+    char *p = s;
+    p = read_argument(p, arg1, TRUE);
+    p = read_argument(p, arg2, TRUE);
+    complex_index = arg1[0] - A_ASCII_VALUE;
+    if (strcmp(command_name, "mult_comp_real") == 0) {
+        multiply_complex_real(pointers_array[complex_index], atof(arg2));
+    } else if (strcmp(command_name, "mult_comp_img") == 0) {
+        multiply_complex_img(pointers_array[complex_index], atof(arg2));
+    }
+}
+
+
 void reset_complexes(complex **pointers_array, int array_size)
 {
     int i;
@@ -263,4 +332,13 @@ void read_complex(complex *number, double real_value, double img_value)
 {
     number->real = real_value;
     number->img = img_value;
+}
+
+void print_complex(complex *number)
+{
+    if (number->img >= 0) {
+        printf("%.2f + (%.2f)i\n", number->real, number->img);
+    } else {
+        printf("%.2f - (%.2f)i\n", number->real, fabs(number->img));
+    }
 }
