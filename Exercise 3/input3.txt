@@ -1,0 +1,45 @@
+print_comp F
+read_comp A, 1, 1
+read_comp B, 2, 2
+read_comp D, -1.59, -1.59
+add_comp A, B      
+add_comp B, D
+sub_comp A, C
+mult_comp_real A, 2.78
+mult_comp_real D, 0
+mult_comp_img B, -3
+mult_comp_comp A, B
+abs_comp D
+abs_comp A
+abs_comp C
+  print_comp F
+                          read_comp    A,            1,   1
+     read_comp B,2,2
+read_comp    D,-1.59,     -1.59
+    add_comp  A,B      
+add_comp B  ,      D
+sub_comp    A, C
+mult_comp_real A,  2.78             
+mult_comp_real      D                   ,   0               
+mult_comp_img B       ,  -3
+         mult_comp_comp  A,  B   
+   abs_comp          D
+abs_comp        A
+abs_comp  C
+fhkjdfhs print_comp F
+,, read_comp A, 1, 1
+read_compB, 2, 2
+read_comp D,, -1.59, -1.59
+add_comp A, B ,     
+add_comp B, D       jhkl
+sub_comp A, 8
+mult_comp_real 90, 2.78
+mult_comp_real D, 0, 0, 0, 0
+mult_comp_img B,0 -3
+mult_comp_comp, A, B
+abs_comp 8908
+abs_comp A,
+abs_comp 1
+stop,
+,stop
+    stop

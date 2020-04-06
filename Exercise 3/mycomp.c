@@ -29,3 +29,18 @@ int main()
     }
     return 0;
 }
+
+void reset_complexes(complex **pointers_array, int array_size)
+{
+    int i;
+    for (i = 0; i < array_size ; i++) {
+        pointers_array[i]->real = 0;
+        pointers_array[i]->img = 0;
+    }
+}
+
+void read_complex(complex *number, double real_value, double img_value)
+{
+    number->real = real_value;
+    number->img = img_value;
+}
