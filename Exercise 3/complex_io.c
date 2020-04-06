@@ -72,7 +72,10 @@ int check_num_of_args_and_commas(char *s)
             }
         }
     }
-    if (count - comma_count != 1) {
+    if (count == 0 && comma_count == 0) {
+        return count;
+    }
+    else if (count - comma_count != 1) {
         return ERROR;
     }
     return count;
@@ -136,6 +139,7 @@ int validate_number_of_args_and_commas(int args_num, char *s)
     }
     else if (num_of_args == ERROR) {
         printf("Invalid amount or position of commas.\n");
+        return INVALID;
     }
     return VALID;
 }
@@ -171,6 +175,7 @@ int validate_complex(char *s)
     arg_length = strlen(s);
 
     if (arg_length > 1) {
+        printf("Invalid parameter - not a defined complex number.\n");
         return INVALID;
     } else if (arg_length == 1) {
         if (s[0] != 'A' && s[0] != 'B' && s[0] != 'C' && s[0] != 'D' && s[0] != 'E' && s[0] != 'F') {
@@ -247,11 +252,12 @@ int validate_mult_real_and_img(char *s)
 
 int validate_stop(char *s)
 {
-    if (*s != '\n' || *s != '\0' || *s != EOF || s != NULL) {
-        printf("Extraneous text after stop command.\n");
-        return INVALID;
+    s = pass_white_chars(s);
+    if (*s == '\0' || *s == EOF || s == NULL || *s == '\n') {
+        return VALID;
     }
-    return VALID;
+    printf("\nExtraneous text after stop command.\n");
+    return INVALID;
 }
 
 void execute_read_comp(char *s, complex **pointers_array)

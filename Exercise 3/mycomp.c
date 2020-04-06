@@ -20,6 +20,7 @@ int main()
         fputs(command_line, stdout);
         line_without_command = read_argument(command_line, command_name, FALSE);
         if (validate_command_and_execute(line_without_command, complex_pointers, command_name) == FALSE) {
+            printf("\n");
             return 0;
         }
     }
