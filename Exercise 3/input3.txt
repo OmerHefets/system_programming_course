@@ -1,10 +1,11 @@
 print_comp F
 read_comp A, 1, 1
-read_comp B, 2, 2
+read_comp B, 2, 3
 read_comp D, -1.59, -1.59
 add_comp A, B      
 add_comp B, D
 sub_comp A, C
+sub_comp F, C
 mult_comp_real A, 2.78
 mult_comp_real D, 0
 mult_comp_img B, -3

@@ -1,7 +1,21 @@
+/**
+ * In this module will be declared all the complex number operations that are required in the exercise:
+ * adding, subtracting, multiplying (with real, img, or another complex number) and abs.
+ * Reading a complex number is declared here is as well because it is another command of the program.
+ */
+
 #include <stdio.h>
 #include <math.h>
 #include "complex.h"
 
+/* reading values to a complex number */
+void read_complex(complex *number, double real_value, double img_value)
+{
+    number->real = real_value;
+    number->img = img_value;
+}
+
+/* adding the values of two complex numbers and printing the result to the screen */
 void add_complex_numbers(complex *z, complex *w)
 {
     complex temp;
@@ -11,6 +25,7 @@ void add_complex_numbers(complex *z, complex *w)
     print_complex(p);
 }
 
+/* subtracting the values of two complex numbers and printing the result to the screen */
 void sub_complex_numbers(complex *z, complex *w)
 {
     complex temp;
@@ -20,6 +35,7 @@ void sub_complex_numbers(complex *z, complex *w)
     print_complex(p);
 }
 
+/* multiplying a complex number with a real number and printing the result to the screen */
 void multiply_complex_real(complex *z, double real_number)
 {
     complex temp;
@@ -29,6 +45,7 @@ void multiply_complex_real(complex *z, double real_number)
     print_complex(p);
 }
 
+/* multiplying a complex number with an imaginary number and printing the result to the screen */
 void multiply_complex_img(complex *z, double img_number)
 {
     complex temp;
@@ -38,6 +55,7 @@ void multiply_complex_img(complex *z, double img_number)
     print_complex(p);
 }
 
+/* multiplying a complex number with another complex number and printing the result to the screen */
 void multiply_complexes(complex *z, complex *w)
 {
     complex temp;
@@ -47,6 +65,7 @@ void multiply_complexes(complex *z, complex *w)
     print_complex(p);
 }
 
+/* calculate the abs of a complex number and print the result to the screen (print a number) */
 void abs_of_complex(complex *z)
 {
     double abs;

@@ -18,4 +18,3 @@ abs_comp
 abs_comp 2.5
 abs_comp A
 abs_comp 00
-stop

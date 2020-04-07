@@ -1,0 +1,83 @@
+Hello. this program executes commands on complex numbers as you define.
+There are six complex numbers defined in this program: A, B, C, D, E, F. It's not possible to define more.
+All complexes are reset to zero at the beginning. When reqested to, insert a command in the following way:
+"command_name" "arg1", "arg2", "arg3"
+make sure to have a comma between each argument, and not at the end / before the first arg. white chars are ignored everywhere.
+The following commands are possible: reading complex, printing complex, adding, subtracting, multiplying or abs:
+Reading a number: "read_comp" "complex_name", "number_arg", "number_arg"
+Printing a number: "print_comp" "complex_name"
+Adding two numbers: "add_comp" "complex_name", "complex_name"
+Subtracting two numbers: "sub_comp" "complex_name", "complex_name"
+Multiplying a complex number with a real number: "mult_comp_real" "complex_name", "number_arg"
+Multiplying a complex number with an imaginary number:"mult_comp_img" "complex_name", "number_arg"
+Multiplying two complex numbers: "mult_comp_comp" "complex_name", "complex_name"
+Calculate the abs of the complex number: "abs_comp" "complex_name"
+Stop the program: "stop"
+Insert your command:
+The command was: print_comp A
+0.00 + (0.00)i
+Insert your command:
+The command was: print_comp B
+0.00 + (0.00)i
+Insert your command:
+The command was: print_comp C
+0.00 + (0.00)i
+Insert your command:
+The command was: read_comp A, 45.1, -23.75
+Insert your command:
+The command was: print_comp A
+45.10 - (23.75)i
+Insert your command:
+The command was: read_comp B, 54.2, 3.56
+Insert your command:
+The command was: print_comp B
+54.20 + (3.56)i
+Insert your command:
+The command was: 
+Insert your command:
+The command was: 
+Insert your command:
+The command was: 
+Insert your command:
+The command was: read_comp C, 0, -1
+Insert your command:
+The command was: print_comp C
+0.00 - (1.00)i
+Insert your command:
+The command was: add_comp A, B
+99.30 - (20.19)i
+Insert your command:
+The command was: sub_comp C, A
+-45.10 + (22.75)i
+Insert your command:
+The command was: sub_comp B, B
+0.00 + (0.00)i
+Insert your command:
+The command was: sub_comp D, A
+-45.10 + (23.75)i
+Insert your command:
+The command was: mult_comp_real A, 2.51
+113.20 - (59.61)i
+Insert your command:
+The command was: mult_comp_img A, -2.564
+-60.90 - (115.64)i
+Insert your command:
+The command was: mult_comp_comp A, B
+2528.97 - (1126.69)i
+Insert your command:
+The command was: mult_comp_comp     E     ,         C
+0.00 + (0.00)i
+Insert your command:
+The command was: abs_comp A
+The abs value is: 50.97
+Insert your command:
+The command was: abs_comp B
+The abs value is: 54.32
+Insert your command:
+The command was: abs_comp C
+The abs value is: 1.00
+Insert your command:
+The command was: abs_comp F
+The abs value is: 0.00
+Insert your command:
+The command was: stop

@@ -1,0 +1,77 @@
+Hello. this program executes commands on complex numbers as you define.
+There are six complex numbers defined in this program: A, B, C, D, E, F. It's not possible to define more.
+All complexes are reset to zero at the beginning. When reqested to, insert a command in the following way:
+"command_name" "arg1", "arg2", "arg3"
+make sure to have a comma between each argument, and not at the end / before the first arg. white chars are ignored everywhere.
+The following commands are possible: reading complex, printing complex, adding, subtracting, multiplying or abs:
+Reading a number: "read_comp" "complex_name", "number_arg", "number_arg"
+Printing a number: "print_comp" "complex_name"
+Adding two numbers: "add_comp" "complex_name", "complex_name"
+Subtracting two numbers: "sub_comp" "complex_name", "complex_name"
+Multiplying a complex number with a real number: "mult_comp_real" "complex_name", "number_arg"
+Multiplying a complex number with an imaginary number:"mult_comp_img" "complex_name", "number_arg"
+Multiplying two complex numbers: "mult_comp_comp" "complex_name", "complex_name"
+Calculate the abs of the complex number: "abs_comp" "complex_name"
+Stop the program: "stop"
+Insert your command:
+The command was: read_comp G4sa, 3.1, 6.5
+Invalid parameter - not a defined complex number.
+Insert your command:
+The command was: read_comp a, 3.6, 5.1
+Invalid parameter - not a defined complex number.
+Insert your command:
+The command was: do_it A, B
+invalid function name.
+Insert your command:
+The command was: Add_Comp A, C
+invalid function name.
+Insert your command:
+The command was: read_comp A, 3.5, xyz
+Invalid parameter - not a decimal number.
+Insert your command:
+The command was: read_comp A, 3.5
+Invalid number of arguments - missing arguments.
+Insert your command:
+The command was: read_comp A, 3.5, -3, 
+Invalid amount or position of commas.
+Insert your command:
+The command was: add_comp B
+Invalid number of arguments - missing arguments.
+Insert your command:
+The command was: add_comp                
+Invalid number of arguments - missing arguments.
+Insert your command:
+The command was: print_comp C, D
+Invalid number of arguments - too many arguments.
+Insert your command:
+The command was: print_comp 5
+Invalid parameter - not a defined complex number.
+Insert your command:
+The command was: print_comp 555
+Invalid parameter - not a defined complex number.
+Insert your command:
+The command was: sub_comp F, ,D
+Invalid amount or position of commas.
+Insert your command:
+The command was: mult_comp_comp F D
+Invalid amount or position of commas.
+Insert your command:
+The command was: mult_comp_real, A, 2.5
+Invalid amount or position of commas.
+Insert your command:
+The command was: mult_comp_img A, B
+Invalid parameter - not a decimal number.
+Insert your command:
+The command was: abs_comp
+Invalid number of arguments - missing arguments.
+Insert your command:
+The command was: abs_comp 2.5
+Invalid parameter - not a defined complex number.
+Insert your command:
+The command was: abs_comp A
+The abs value is: 0.00
+Insert your command:
+The command was: abs_comp 00
+Invalid parameter - not a defined complex number.
+Insert your command:
+Error: there is no ending condition to the script. stopping because of EOF

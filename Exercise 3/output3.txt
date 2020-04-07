@@ -1,0 +1,144 @@
+Hello. this program executes commands on complex numbers as you define.
+There are six complex numbers defined in this program: A, B, C, D, E, F. It's not possible to define more.
+All complexes are reset to zero at the beginning. When reqested to, insert a command in the following way:
+"command_name" "arg1", "arg2", "arg3"
+make sure to have a comma between each argument, and not at the end / before the first arg. white chars are ignored everywhere.
+The following commands are possible: reading complex, printing complex, adding, subtracting, multiplying or abs:
+Reading a number: "read_comp" "complex_name", "number_arg", "number_arg"
+Printing a number: "print_comp" "complex_name"
+Adding two numbers: "add_comp" "complex_name", "complex_name"
+Subtracting two numbers: "sub_comp" "complex_name", "complex_name"
+Multiplying a complex number with a real number: "mult_comp_real" "complex_name", "number_arg"
+Multiplying a complex number with an imaginary number:"mult_comp_img" "complex_name", "number_arg"
+Multiplying two complex numbers: "mult_comp_comp" "complex_name", "complex_name"
+Calculate the abs of the complex number: "abs_comp" "complex_name"
+Stop the program: "stop"
+Insert your command:
+The command was: print_comp F
+0.00 + (0.00)i
+Insert your command:
+The command was: read_comp A, 1, 1
+Insert your command:
+The command was: read_comp B, 2, 3
+Insert your command:
+The command was: read_comp D, -1.59, -1.59
+Insert your command:
+The command was: add_comp A, B      
+3.00 + (4.00)i
+Insert your command:
+The command was: add_comp B, D
+0.41 + (1.41)i
+Insert your command:
+The command was: sub_comp A, C
+1.00 + (1.00)i
+Insert your command:
+The command was: sub_comp F, C
+0.00 + (0.00)i
+Insert your command:
+The command was: mult_comp_real A, 2.78
+2.78 + (2.78)i
+Insert your command:
+The command was: mult_comp_real D, 0
+0.00 + (0.00)i
+Insert your command:
+The command was: mult_comp_img B, -3
+9.00 - (6.00)i
+Insert your command:
+The command was: mult_comp_comp A, B
+-1.00 + (5.00)i
+Insert your command:
+The command was: abs_comp D
+The abs value is: 2.25
+Insert your command:
+The command was: abs_comp A
+The abs value is: 1.41
+Insert your command:
+The command was: abs_comp C
+The abs value is: 0.00
+Insert your command:
+The command was:   print_comp F
+0.00 + (0.00)i
+Insert your command:
+The command was:                           read_comp    A,            1,   1
+Insert your command:
+The command was:      read_comp B,2,2
+Insert your command:
+The command was: read_comp    D,-1.59,     -1.59
+Insert your command:
+The command was:     add_comp  A,B      
+3.00 + (3.00)i
+Insert your command:
+The command was: add_comp B  ,      D
+0.41 + (0.41)i
+Insert your command:
+The command was: sub_comp    A, C
+1.00 + (1.00)i
+Insert your command:
+The command was: mult_comp_real A,  2.78             
+2.78 + (2.78)i
+Insert your command:
+The command was: mult_comp_real      D                   ,   0               
+0.00 + (0.00)i
+Insert your command:
+The command was: mult_comp_img B       ,  -3
+6.00 - (6.00)i
+Insert your command:
+The command was:          mult_comp_comp  A,  B   
+0.00 + (4.00)i
+Insert your command:
+The command was:    abs_comp          D
+The abs value is: 2.25
+Insert your command:
+The command was: abs_comp        A
+The abs value is: 1.41
+Insert your command:
+The command was: abs_comp  C
+The abs value is: 0.00
+Insert your command:
+The command was: fhkjdfhs print_comp F
+invalid function name.
+Insert your command:
+The command was: ,, read_comp A, 1, 1
+Insert your command:
+The command was: read_compB, 2, 2
+invalid function name.
+Insert your command:
+The command was: read_comp D,, -1.59, -1.59
+Invalid amount or position of commas.
+Insert your command:
+The command was: add_comp A, B ,     
+Invalid amount or position of commas.
+Insert your command:
+The command was: add_comp B, D       jhkl
+Invalid amount or position of commas.
+Insert your command:
+The command was: sub_comp A, 8
+Invalid parameter - not a defined complex number.
+Insert your command:
+The command was: mult_comp_real 90, 2.78
+Invalid parameter - not a defined complex number.
+Insert your command:
+The command was: mult_comp_real D, 0, 0, 0, 0
+Invalid number of arguments - too many arguments.
+Insert your command:
+The command was: mult_comp_img B,0 -3
+Invalid amount or position of commas.
+Insert your command:
+The command was: mult_comp_comp, A, B
+Invalid amount or position of commas.
+Insert your command:
+The command was: abs_comp 8908
+Invalid parameter - not a defined complex number.
+Insert your command:
+The command was: abs_comp A,
+Invalid amount or position of commas.
+Insert your command:
+The command was: abs_comp 1
+Invalid parameter - not a defined complex number.
+Insert your command:
+The command was: stop,
+Extraneous text after stop command.
+Insert your command:
+The command was: ,stop
+Insert your command:
+The command was:     stop
