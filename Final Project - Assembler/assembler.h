@@ -1,8 +1,19 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <ctype.h>
 
+#define TRUE 1
+#define FALSE 0
 #define MAX_LABEL_SIZE 33 /* max size of label is 31, and added ':' and '/0' at the end of the label */
+#define LABEL 1
+#define COMMAND 2
+#define EMPTY_OR_COMMENT 0
+#define UNDEFINED 0
+
+extern char *registers[];
+extern char *opcodes[];
+extern char *data_operations[];
 
 typedef struct symbol_table *SymbolPtr;
 typedef struct symbol_table {
@@ -81,3 +92,12 @@ void edit_instruction_command(InstructionPtr ptr, unsigned long int new_command)
 
 void edit_data_memory(DataPtr ptr, unsigned long int new_memory);
 void edit_data_data(DataPtr ptr, unsigned long int new_data);
+
+
+/* parsing error checking */
+int check_correct_label(char *str);
+int check_command_exists(char *str);
+
+/* parsing */
+int analyze_first_buffer(char *token, char *label, int *error_in_file);
+void parse_line_first_pass(char *line, int *error_in_file, SymbolPtr symbol_head);

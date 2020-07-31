@@ -1,4 +1,6 @@
-void first_maavar(..., *no_errors)
+#include "assembler.h"
+
+void first_pass(..., *no_errors)
 {
     while(getline != EOF) {
         nituah_line_first(..., *no_errors);
@@ -6,46 +8,7 @@ void first_maavar(..., *no_errors)
     update_data_symbols(symbols_table);
 }
 
-void nituah_line_first()
-{
-    int buffer_type = 0, label;
-    char optional_label[MAX_LABEL_SIZE];
-    buffer_type = analyse_first_buffer(,*optional_label);
-    /* if's depending on the buffer type */
-    if comment or empty or not_defined {
-        return;
-    }
-    if label {
-        label = TRUE;
-        read_buffer();
-        check_correct_command();
-    }
-    if buffer == ".string" or ".data" {
-        compile_string_or_data_line(...,buffer , label);
-    } else if buffer == ".extern" or ".entry" {
-        compile_entry_or_extern_line(...,buffer, label);
-    } else { /* this is an operation */
-        compile_operation_line(...,buffer, label);
-    }
-}
 
-void compile_string_or_data_line()
-{
-    if (LABEL == TRUE) {
-        if (check_label_duplication(*optional_label, *label_table) == TRUE) {
-            insert_label();
-        } else { /* this label already exists */
-            *no_error = FALSE;
-            stdout("this is the error...");
-            return;
-        }
-    }
-    if buffer == ".data" {
-        compile_data_line();
-    } else { /* buffer is ".string" */
-        compile_string_line();
-    }
-}
 
 void compile_data_line()
 {

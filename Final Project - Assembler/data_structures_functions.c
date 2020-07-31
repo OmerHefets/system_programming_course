@@ -254,8 +254,15 @@ void edit_data_data(DataPtr ptr, unsigned long int new_data)
     ptr->data = new_data;
 }
 
-
-
-void edit_DB(); /* for each one of them */
-
-void update_data_symbols();
+int check_label_duplication_in_symbols(char *label, SymbolPtr head_symbol_list)
+{
+    int duplication_exists = FALSE;
+    SymbolPtr temp = head_symbol_list;
+    while (temp != NULL) {
+        if (!strcmp(temp->label, label)) {
+            duplication_exists = TRUE;
+        }
+        temp = temp->next;
+    }
+    return duplication_exists;
+}
