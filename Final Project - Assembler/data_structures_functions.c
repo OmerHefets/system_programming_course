@@ -84,74 +84,126 @@ void free_data_list(DataPtr head)
     }
 }
 
-SymbolPtr add_symbol(char *label, int label_length, SymbolPtr head_symbol_list)
+void add_symbol(SymbolPtr *head_symbol_list, char *label, int label_length, unsigned long int memory,
+unsigned char code_or_data, unsigned char external, unsigned char entry)
 {
     SymbolPtr symbol_ptr = symbol_alloc();
-    SymbolPtr temp = head_symbol_list;
+    SymbolPtr temp = *head_symbol_list;
+    symbol_ptr->memory = memory;
+    symbol_ptr->code_or_data = code_or_data;
+    symbol_ptr->external = external;
+    symbol_ptr->entry = entry;
     symbol_ptr->next = NULL;
     strncat(symbol_ptr->label, label, label_length);
 
     if (temp == NULL) {
-        return symbol_ptr;
+        *head_symbol_list = symbol_ptr;
     } else {
         while (temp->next != NULL) {
             temp = temp->next;
         }
         temp->next = symbol_ptr;
-        return head_symbol_list;
     }
 }
 
-ExternPtr add_extern(char *label, int label_length, ExternPtr head_extern_list)
+void add_extern(ExternPtr *head_extern_list, char *label, int label_length, unsigned long int memory)
 {
     ExternPtr extern_ptr = extern_alloc();
-    ExternPtr temp = head_extern_list;
+    ExternPtr temp = *head_extern_list;
+    extern_ptr->memory = memory;
     extern_ptr->next = NULL;
     strncat(extern_ptr->label, label, label_length);
 
     if (temp == NULL) {
-        return extern_ptr;
+        *head_extern_list = extern_ptr;
     } else {
         while (temp->next != NULL) {
             temp = temp->next;
         }
         temp->next = extern_ptr;
-        return head_extern_list;
     }
 }
 
-InstructionPtr add_instruction(InstructionPtr head_instruction_list)
+void add_instruction(InstructionPtr *head_instruction_list, unsigned long int memory, unsigned long int command)
 {
     InstructionPtr instruction_ptr = instruction_alloc();
-    InstructionPtr temp = head_instruction_list;
+    InstructionPtr temp = *head_instruction_list;
+    instruction_ptr->memory = memory;
+    instruction_ptr->command = command;
     instruction_ptr->next = NULL;
 
     if (temp == NULL) {
-        return instruction_ptr;
+        *head_instruction_list = instruction_ptr;
     } else {
         while (temp->next != NULL) {
             temp = temp->next;
         }
         temp->next = instruction_ptr;
-        return head_instruction_list;
     }
 }
 
-DataPtr add_data(DataPtr head_data_list)
+void add_data(DataPtr *head_data_list, unsigned long int memory, unsigned long int data)
 {
     DataPtr data_ptr = data_alloc();
-    DataPtr temp = head_data_list;
+    DataPtr temp = *head_data_list;
     data_ptr->next = NULL;
 
     if (temp == NULL) {
-        return data_ptr;
+        *head_data_list = data_ptr;
     } else {
         while (temp->next != NULL) {
             temp = temp->next;
         }
         temp->next = data_ptr;
-        return head_data_list;
     }
+}
+
+SymbolPtr get_symbol_by_label(SymbolPtr head_symbol_list, char *label)
+{
+    SymbolPtr temp = head_symbol_list;
+    while (temp != NULL) {
+        if (!strcmp(temp->label, label)) {
+            return temp;
+        }
+        temp = temp->next;
+    }
+    return NULL;
+}
+
+ExternPtr get_extern_by_label(ExternPtr head_extern_list, char *label)
+{
+    ExternPtr temp = head_extern_list;
+    while (temp != NULL) {
+        if (!strcmp(temp->label, label)) {
+            return temp;
+        }
+        temp = temp->next;
+    }
+    return NULL;
+}
+
+InstructionPtr get_instruction_by_memory(InstructionPtr head_instruction_list, unsigned long int memory)
+{
+    InstructionPtr temp = head_instruction_list;
+    while (temp != NULL) {
+        if (temp->memory == memory) {
+            return temp;
+        }
+        temp = temp->next;
+    }
+    return NULL;
+}
+
+DataPtr get_data_by_memory(DataPtr head_data_ptr, unsigned long int memory)
+{
+    DataPtr temp = head_data_ptr;
+    while (temp != NULL) {
+        if (temp->memory == memory) {
+            return temp;
+        }
+        temp = temp->next;
+    }
+    return NULL;
 }
 
 char *get_symbol_label(SymbolPtr ptr)

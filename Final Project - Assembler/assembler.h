@@ -10,6 +10,8 @@
 #define COMMAND 2
 #define EMPTY_OR_COMMENT 0
 #define UNDEFINED 0
+#define CODE 0
+#define DATA 1
 
 extern char *registers[];
 extern char *opcodes[];
@@ -60,10 +62,17 @@ void free_extern_list(ExternPtr head);
 void free_instruction_list(InstructionPtr head);
 void free_data_list(DataPtr head);
 
-SymbolPtr add_symbol(char *label, int label_length, SymbolPtr head_symbol_list);
-ExternPtr add_extern(char *label, int label_length, ExternPtr head_extern_list);
-InstructionPtr add_instruction(InstructionPtr head_instruction_list);
-DataPtr add_data(DataPtr head_data_list);
+void add_symbol(SymbolPtr *head_symbol_list, char *label, int label_length, unsigned long int memory,
+unsigned char code_or_data, unsigned char external, unsigned char entry);
+void add_extern(ExternPtr *head_extern_list, char *label, int label_length, unsigned long int memory);
+void add_instruction(InstructionPtr *head_instruction_list, unsigned long int memory, unsigned long int command);
+void add_data(DataPtr *head_data_list, unsigned long int memory, unsigned long int data);
+
+SymbolPtr get_symbol_by_label(SymbolPtr head_symbol_list, char *label);
+ExternPtr get_extern_by_label(ExternPtr head_extern_list, char *label);
+InstructionPtr get_instruction_by_memory(InstructionPtr head_instruction_list, unsigned long int memory);
+DataPtr get_data_by_memory(DataPtr head_data_ptr, unsigned long int memory);
+
 
 char *get_symbol_label(SymbolPtr ptr);
 unsigned long int get_symbol_memory(SymbolPtr ptr);
@@ -93,6 +102,8 @@ void edit_instruction_command(InstructionPtr ptr, unsigned long int new_command)
 void edit_data_memory(DataPtr ptr, unsigned long int new_memory);
 void edit_data_data(DataPtr ptr, unsigned long int new_data);
 
+int check_label_duplication_in_symbols(char *label, SymbolPtr head_symbol_list);
+
 
 /* parsing error checking */
 int check_correct_label(char *str);
@@ -100,4 +111,6 @@ int check_command_exists(char *str);
 
 /* parsing */
 int analyze_first_buffer(char *token, char *label, int *error_in_file);
-void parse_line_first_pass(char *line, int *error_in_file, SymbolPtr symbol_head);
+void parse_line_first_pass(char *line, int *error_in_file, SymbolPtr *symbol_head, int *dc, int *ic);
+void parse_string_or_data_line(char *label, char *command, int label_flag, SymbolPtr *symbol_head, int* error_in_file, 
+int *dc, char *line, int index_of_arguments);

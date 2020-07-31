@@ -10,16 +10,6 @@ void first_pass(..., *no_errors)
 
 
 
-void compile_data_line()
-{
-    /* make copy of corrent token */
-    if (check_data_arguments(copy_token) == TRUE) {
-        ...code data in data memory + change DC...
-    } else {
-        *no_errors = FALSE;
-        stdout(".....");
-    }
-}
 
 void compile_string_line()
 {

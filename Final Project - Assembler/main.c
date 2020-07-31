@@ -2,16 +2,22 @@
 
 void test_symbol_data_structure()
 {
-    SymbolPtr symbol_head = NULL;
+    SymbolPtr temp, symbol_head = NULL;
     char label[] = "HELLO";
     char label2[] = "LELLO";
 
-    symbol_head = add_symbol(label, 5, symbol_head);
-    symbol_head = add_symbol(label2, 5, symbol_head);
+    add_symbol(label, 5, &symbol_head);
+    add_symbol(label2, 5, &symbol_head);
+    if (symbol_head == NULL) {
+        printf("shit\n");
+    }
     printf("%s\n", get_symbol_label(symbol_head->next));
     printf("%d\n", get_symbol_entry(symbol_head));
     edit_symbol_entry(symbol_head, 1);
     printf("%d\n", get_symbol_entry(symbol_head));
+    printf("duplication: %d\n", check_label_duplication_in_symbols("LELLO", symbol_head));
+    temp = get_symbol_by_label(symbol_head, "HELLO");
+    printf("%d\n", get_symbol_entry(temp));
     free_symbol_list(symbol_head);
 }
 
@@ -83,11 +89,20 @@ void test_analyze_first_buffer()
 
 void test_parse_line_first_pass()
 {
-    SymbolPtr ptr = NULL;
-    char line[] = "         k  ";
+    SymbolPtr head_symbol = NULL;
+    int *dc, *ic;
+    char line[] = "Hello: .data 1,3,4       ";
     int *error, a=0;
     error = &a;
-    parse_line_first_pass(line, error, ptr);
+    dc = &a;
+    ic = &a;
+    parse_line_first_pass(line, error, &head_symbol, dc, ic);
+    printf("%s\n", get_symbol_label(head_symbol));
+    if(head_symbol == NULL)
+    {
+        printf("shit\n");
+    }
+    free_symbol_list(head_symbol);
 
 }
 
