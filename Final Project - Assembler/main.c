@@ -1,5 +1,5 @@
 #include "assembler.h"
-
+/*
 void test_symbol_data_structure()
 {
     SymbolPtr temp, symbol_head = NULL;
@@ -86,12 +86,12 @@ void test_analyze_first_buffer()
     result = analyze_first_buffer(line6, label, a);
     printf("%d\n", result);
 }
-
+*/
 void test_parse_line_first_pass()
 {
     SymbolPtr head_symbol = NULL;
     int *dc, *ic;
-    char line[] = "Hello: .data 1,3,4       ";
+    char line[] = "Hello: .data 1,3,4       .";
     int *error, a=0;
     error = &a;
     dc = &a;

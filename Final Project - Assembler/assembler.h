@@ -6,6 +6,7 @@
 #define TRUE 1
 #define FALSE 0
 #define MAX_LABEL_SIZE 33 /* max size of label is 31, and added ':' and '/0' at the end of the label */
+#define MAX_LINE 80
 #define LABEL 1
 #define COMMAND 2
 #define EMPTY_OR_COMMENT 0
@@ -114,3 +115,4 @@ int analyze_first_buffer(char *token, char *label, int *error_in_file);
 void parse_line_first_pass(char *line, int *error_in_file, SymbolPtr *symbol_head, int *dc, int *ic);
 void parse_string_or_data_line(char *label, char *command, int label_flag, SymbolPtr *symbol_head, int* error_in_file, 
 int *dc, char *line, int index_of_arguments);
+void parse_data_line(char *line, int index_of_arguments, SymbolPtr *symbol_head, int* error_in_file, int *dc);
