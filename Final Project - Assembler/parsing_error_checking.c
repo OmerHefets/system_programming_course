@@ -89,7 +89,16 @@ int check_data_argument(char *arg)
     return TRUE;
 }
 
-void check_string_arguments();
+int check_string_argument(char *line)
+{
+    char *first_quotation, *last_quotation;
+    first_quotation = strchr(line, '\"');
+    last_quotation = strrchr(line, '\"');
+    if (first_quotation == NULL || first_quotation == last_quotation || (last_quotation - first_quotation < 2)) {
+        return FALSE;
+    }
+    return TRUE;
+}
 
 int check_number_of_commas(char *s, int requested_amount_commas)
 {

@@ -10,18 +10,6 @@ void first_pass(..., *no_errors)
 
 
 
-
-void compile_string_line()
-{
-    /* make copy of corrent token */
-    if (check_string_arguments(copy_token) == TRUE) {
-        ...code string data in data memory + change DC...
-    } else {
-        *no_errors = FALSE;
-        stdout(".........");
-    }
-}
-
 void compile_entry_or_extern_line()
 {
     /* optional: add warning if label exists */

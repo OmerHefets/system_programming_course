@@ -70,7 +70,7 @@ DataPtr *data_head, int* error_in_file, int *dc, char *line, int index_of_argume
     if (!strcmp(command, ".data")) {
         parse_data_line(line, index_of_arguments, data_head, error_in_file, dc);
     } else {  /* buffer is ".string" */
-        /*compile_string_line();*/
+        parse_string_line(line, index_of_arguments, data_head, error_in_file, dc);
     }
 }
 
@@ -92,3 +92,35 @@ void parse_data_line(char line[], int index_of_arguments, DataPtr *data_head, in
         fprintf(stdout, "Wrong arguments for data: invalid arguments or commas.\n");
     }
 }
+
+void parse_string_line(char line[], int index_of_arguments, DataPtr *data_head, int* error_in_file, int *dc)
+{
+    char line_copy[MAX_LINE] = "";
+    char *delim = " \t";
+    char *token;
+    strncat(line_copy, line+index_of_arguments, strlen(line));
+    if (check_string_argument(line_copy) == TRUE) {
+        token = strtok(line+index_of_arguments, delim);
+        token++;
+        while (*token != '\"') {
+            add_data(data_head, *dc, *token);
+            token++;
+            (*dc)++;
+        }
+    } else {
+        *error_in_file = TRUE;
+        fprintf(stdout, "Wrong argument for string: invalid argument.\n");
+    }
+}
+
+void parse_entry_or_extern_line(char *command, ExternPtr *extern_head, int* error_in_file,
+char *line, int index_of_arguments)
+{
+    if (!strcmp(command, ".entry")) {
+        return;
+    } else {
+        /* parse_extern_line(); */
+    }
+}
+
+void parse_extern_line();
