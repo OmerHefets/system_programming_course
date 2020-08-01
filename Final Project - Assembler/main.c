@@ -94,7 +94,7 @@ void test_parse_line_first_pass()
     InstructionPtr head_instruction = NULL;
     DataPtr head_data = NULL;
     int *dc, *ic;
-    char line[] = " hello: .string \" s uc \"";
+    char line[] = " .extern   j879hj";
     int *error, dcf=0, icf=0, is_error=0;
     error = &is_error;
     dc = &dcf;
@@ -102,7 +102,7 @@ void test_parse_line_first_pass()
     parse_line_first_pass(line, error, &head_symbol, &head_extern, &head_instruction, &head_data, dc, ic);
     printf("%s\n", get_symbol_label(head_symbol));
     printf("%d\n", *dc);
-    printf("%lu\n", get_data_data(head_data->next->next));
+    /*printf("%lu\n", get_data_data(head_data->next->next));*/
     free_symbol_list(head_symbol);
     free_extern_list(head_extern);
     free_instruction_list(head_instruction);

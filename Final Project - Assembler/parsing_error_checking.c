@@ -21,8 +21,9 @@ int check_command_exists(char *str)
 
 int check_correct_label(char *str)
 {
-    int i;
+    int i=0;
     int buffer_size;
+    char *temp_str = str;
     if (str == NULL) {
         return FALSE;
     }
@@ -31,19 +32,27 @@ int check_correct_label(char *str)
         return FALSE;
     }
 
+    while (*temp_str != '\0' && *temp_str != '\n' && buffer_size-1 > i) {
+        if (!isalnum(*temp_str)) {
+            return FALSE;
+        }
+        temp_str++;
+        i++;
+    }
+
     for (i=0 ; i < 16 ; i++) {
         if (!strncmp(str, opcodes[i], buffer_size-1)) {
             return FALSE;
         }
-    }
-    for (i=0 ; i < 8 ; i++) {
-        if (!strncmp(str, registers[i], buffer_size-1)) {
+        if (i < 8) {
+            if (!strncmp(str, registers[i], buffer_size-1)) {
             return FALSE;
-        }
-    }
-    for (i=0 ; i < 4 ; i++) {
-        if (!strncmp(str, data_operations[i], buffer_size-1)) {
-            return FALSE;
+            }
+            if (i < 4) {
+                if (!strncmp(str, data_operations[i], buffer_size-1)) {
+                    return FALSE;
+                }
+            }
         }
     }
     return TRUE;
@@ -98,6 +107,28 @@ int check_string_argument(char *line)
         return FALSE;
     }
     return TRUE;
+}
+
+int check_extern_argument(char *line)
+{
+    char *delim = " \t";
+    char *token, temp_token[MAX_LABEL_SIZE];
+    token = strtok(line, delim);
+    if (token == NULL) {
+        return FALSE;
+    }
+    strncat(temp_token, token, strlen(token));
+    strncat(temp_token, ":", 1);
+    if(check_correct_label(temp_token)) {
+        token = strtok(NULL, delim);
+        if (token == NULL) {
+            return TRUE;
+        } else {
+            return FALSE;
+        }
+    } else {
+        return FALSE;
+    }
 }
 
 int check_number_of_commas(char *s, int requested_amount_commas)

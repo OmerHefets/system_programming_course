@@ -13,6 +13,7 @@
 #define UNDEFINED 0
 #define CODE 0
 #define DATA 1
+#define NONE -1
 #define UNLIMITED -1
 
 extern char *registers[];
@@ -114,7 +115,7 @@ int check_number_of_commas(char *s, int requested_amount);
 int check_data_arguments(char *line);
 int check_data_argument(char *arg);
 int check_string_argument(char *line);
-
+int check_extern_argument(char *line);
 
 /* parsing */
 int analyze_first_buffer(char *token, char *label, int *error_in_file);
@@ -124,5 +125,7 @@ void parse_string_or_data_line(char *label, char *command, int label_flag, Symbo
 DataPtr *data_head, int* error_in_file, int *dc, char *line, int index_of_arguments);
 void parse_data_line(char *line, int index_of_arguments, DataPtr *data_head, int* error_in_file, int *dc);
 void parse_string_line(char line[], int index_of_arguments, DataPtr *data_head, int* error_in_file, int *dc);
-void parse_entry_or_extern_line(char *command, ExternPtr *extern_head, int* error_in_file,
+void parse_entry_or_extern_line(char *command, ExternPtr *extern_head, SymbolPtr *symbol_head, int* error_in_file,
 char *line, int index_of_arguments);
+void parse_extern_line(char *line, int index_of_arguments, ExternPtr *extern_head, SymbolPtr *symbol_head,
+int *error_in_file);

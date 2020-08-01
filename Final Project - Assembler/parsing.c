@@ -49,7 +49,7 @@ InstructionPtr *instruction_head, DataPtr *data_head, int *dc, int *ic)
         parse_string_or_data_line(optional_label, token, label_flag, symbol_head, data_head, error_in_file,
         dc, line_copy, token + strlen(token) - line);
     } else if (!strcmp(token, ".entry") || !strcmp(token, ".extern")) {
-        /*compile_entry_or_extern_line(token);*/
+        parse_entry_or_extern_line(token, extern_head, symbol_head, error_in_file, line_copy, token + strlen(token) - line);
     } else { /* this is an operation */
         /*compile_operation_line(optional_label ,token, label_flag);*/
     }
@@ -60,7 +60,7 @@ DataPtr *data_head, int* error_in_file, int *dc, char *line, int index_of_argume
 {
     if (label_flag == TRUE) {
         if (check_label_duplication_in_symbols(label, *symbol_head) == FALSE) {
-            add_symbol(symbol_head, label, strlen(label), *dc, DATA, 0, 0);
+            add_symbol(symbol_head, label, strlen(label), *dc, DATA, FALSE, FALSE);
         } else {  
             *error_in_file = TRUE;
             fprintf(stdout, "This label already exists! \n");
@@ -95,11 +95,9 @@ void parse_data_line(char line[], int index_of_arguments, DataPtr *data_head, in
 
 void parse_string_line(char line[], int index_of_arguments, DataPtr *data_head, int* error_in_file, int *dc)
 {
-    char line_copy[MAX_LINE] = "";
     char *delim = " \t";
     char *token;
-    strncat(line_copy, line+index_of_arguments, strlen(line));
-    if (check_string_argument(line_copy) == TRUE) {
+    if (check_string_argument(line+index_of_arguments) == TRUE) {
         token = strtok(line+index_of_arguments, delim);
         token++;
         while (*token != '\"') {
@@ -113,14 +111,37 @@ void parse_string_line(char line[], int index_of_arguments, DataPtr *data_head, 
     }
 }
 
-void parse_entry_or_extern_line(char *command, ExternPtr *extern_head, int* error_in_file,
+void parse_entry_or_extern_line(char *command, ExternPtr *extern_head, SymbolPtr *symbol_head, int* error_in_file,
 char *line, int index_of_arguments)
 {
     if (!strcmp(command, ".entry")) {
         return;
     } else {
-        /* parse_extern_line(); */
+        parse_extern_line(line, index_of_arguments, extern_head, symbol_head, error_in_file);
     }
 }
 
-void parse_extern_line();
+void parse_extern_line(char *line, int index_of_arguments, ExternPtr *extern_head, SymbolPtr *symbol_head,
+int *error_in_file)
+{
+    char line_copy[MAX_LINE] = "";
+    char *delim = " \t";
+    char *token;
+    SymbolPtr optional_existing_label;
+    strncat(line_copy, line+index_of_arguments, strlen(line));
+    if (check_extern_argument(line_copy) == TRUE) {
+        token = strtok(line+index_of_arguments, delim);
+        if(check_label_duplication_in_symbols(token, *symbol_head) == FALSE) {
+            add_symbol(symbol_head, token, strlen(token), 0, NONE, TRUE, FALSE);
+        } else {
+            optional_existing_label = get_symbol_by_label(*symbol_head, token);
+            if (get_symbol_external(optional_existing_label) == FALSE) {
+                *error_in_file = TRUE;
+                fprintf(stdout, "This label already exists, and not as external.\n");
+            }
+        }
+    } else {
+        *error_in_file = TRUE;
+        fprintf(stdout, "Wrong argument for extern: invalid argument.\n");
+    }
+}

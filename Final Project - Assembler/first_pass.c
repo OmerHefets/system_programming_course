@@ -10,35 +10,15 @@ void first_pass(..., *no_errors)
 
 
 
-void compile_entry_or_extern_line()
+void parse_operation_line(char *line, int *error_in_file, SymbolPtr *symbol_head, ExternPtr *extern_head,
+InstructionPtr *instruction_head, DataPtr *data_head, int *dc, int *ic)
 {
-    /* optional: add warning if label exists */
-    if buffer == ".entry" {
-        return; /* void... */
-    } else { /* the buffer is ".extern" */
-        compile_extern_line();
-    }
-}
-
-void compile_extern_line()
-{
-    /* make copy of corrent token */
-    if (check_extern_arguments(copy_token) == TRUE) {
-        /*...get parameter and make sure he's not in the symbol's list (OK if as an extern), add him or error*/
-    } else {
-        *no_errors = FALSE;
-        stdout("....");
-    }
-}
-
-void compile_operation_line()
-{
-    if (LABEL == TRUE) {
-        if (check_label_duplication(*optional_label, *label_table) == TRUE) {
-            insert_label();
-        } else { /* this label already exists */
-            *no_error = FALSE;
-            stdout("this is the error...");
+    if (label_flag == TRUE) {
+        if (check_label_duplication_in_symbols(label, *symbol_head) == FALSE) {
+            add_symbol(symbol_head, label, strlen(label), *ic, CODE, 0, 0);
+        } else {  
+            *error_in_file = TRUE;
+            fprintf(stdout, "This label already exists! \n");
             return;
         }
     }
