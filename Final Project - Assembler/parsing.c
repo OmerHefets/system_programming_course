@@ -49,9 +49,11 @@ InstructionPtr *instruction_head, DataPtr *data_head, int *dc, int *ic)
         parse_string_or_data_line(optional_label, token, label_flag, symbol_head, data_head, error_in_file,
         dc, line_copy, token + strlen(token) - line);
     } else if (!strcmp(token, ".entry") || !strcmp(token, ".extern")) {
-        parse_entry_or_extern_line(token, extern_head, symbol_head, error_in_file, line_copy, token + strlen(token) - line);
+        parse_entry_or_extern_line(token, extern_head, symbol_head, error_in_file, line_copy,
+        token + strlen(token) - line);
     } else { /* this is an operation */
-        /*compile_operation_line(optional_label ,token, label_flag);*/
+        parse_operation_line(optional_label, token, label_flag, symbol_head, instruction_head, error_in_file, ic,
+        line_copy, token + strlen(token) - line);
     }
 }
 
@@ -144,4 +146,84 @@ int *error_in_file)
         *error_in_file = TRUE;
         fprintf(stdout, "Wrong argument for extern: invalid argument.\n");
     }
+}
+
+void parse_operation_line(char *label, char *command, int label_flag, SymbolPtr *symbol_head,
+InstructionPtr *instruction_head, int* error_in_file, int *ic, char *line, int index_of_arguments)
+{
+    char line_copy[MAX_LINE] = "";
+    strncat(line_copy, line+index_of_arguments, strlen(line));
+    if (label_flag == TRUE) {
+        if (check_label_duplication_in_symbols(label, *symbol_head) == FALSE) {
+            add_symbol(symbol_head, label, strlen(label), *ic, CODE, FALSE, FALSE);
+        } else {  
+            *error_in_file = TRUE;
+            fprintf(stdout, "This label already exists! \n");
+            return;
+        }
+    }
+    if(check_instruction_arguments(line_copy, command)) {
+        printf("success\n");
+        /*...code the instructions that you can in the DB...*/
+    } else {
+        fprintf(stdout, "Invalid arguments for this opcode instruction \n");
+    }
+}
+
+
+
+
+
+
+int get_command_index(char *command)
+{
+    int i;
+    for (i=0 ; i < 16 ; i++) {
+        if (!strcmp(command, opcodes[i])) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+int get_operand_type(char *operand)
+{
+    char temp_operand[MAX_LABEL_SIZE] = "";
+    char temp_operand2[MAX_LABEL_SIZE] = "";
+    if (operand == NULL) {
+        return NONE;
+    }
+    strncat(temp_operand, operand, strlen(operand));
+    strncat(temp_operand, ":", 1);
+    if (operand[0] == '#') {
+        operand++;
+        while (*operand != '\0' && *operand != '\n') {
+            if(!isdigit(*operand)) {
+                return NONE;
+            }
+            operand++;
+        }
+        return 0;
+    } else if (check_correct_label(temp_operand)) {
+        return 1;
+    }
+    strncat(temp_operand2, operand+1, strlen(operand)-1);
+    strncat(temp_operand2, ":", 1);
+    if (operand[0] == '&' && check_correct_label(temp_operand2)) {
+        return 2;
+    } else if (check_correct_register(operand)) {
+        return 3;
+    }
+    return NONE;
+}
+
+int is_legal_operand_type(int *optional_operands, int operand_type)
+{
+    int i;
+    for (i=0 ; i < 3 ; i++) {
+        if (optional_operands[i] == operand_type) {
+            return TRUE;
+        }
+    }
+    return FALSE;
 }

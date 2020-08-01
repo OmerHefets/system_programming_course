@@ -19,6 +19,11 @@
 extern char *registers[];
 extern char *opcodes[];
 extern char *data_operations[];
+extern int opcodes_opcode[];
+extern int opcodes_funct[];
+extern int opcodes_first_operand[16][3];
+extern int opcodes_second_operand[16][3];
+extern int opcodes_number_of_operands[];
 
 typedef struct symbol_table *SymbolPtr;
 typedef struct symbol_table {
@@ -110,12 +115,16 @@ int check_label_duplication_in_symbols(char *label, SymbolPtr head_symbol_list);
 
 /* parsing error checking */
 int check_correct_label(char *str);
+int check_correct_register(char *str);
 int check_command_exists(char *str);
 int check_number_of_commas(char *s, int requested_amount);
 int check_data_arguments(char *line);
 int check_data_argument(char *arg);
 int check_string_argument(char *line);
 int check_extern_argument(char *line);
+int check_instruction_arguments(char *line, char *command);
+int check_one_operand_in_instruction(char *line, char *command);
+int check_two_operands_in_instruction(char *line, char *command);
 
 /* parsing */
 int analyze_first_buffer(char *token, char *label, int *error_in_file);
@@ -129,3 +138,11 @@ void parse_entry_or_extern_line(char *command, ExternPtr *extern_head, SymbolPtr
 char *line, int index_of_arguments);
 void parse_extern_line(char *line, int index_of_arguments, ExternPtr *extern_head, SymbolPtr *symbol_head,
 int *error_in_file);
+void parse_operation_line(char *label, char *command, int label_flag, SymbolPtr *symbol_head,
+InstructionPtr *instruction_head, int* error_in_file, int *ic, char *line, int index_of_arguments);
+
+
+/* helper functions? */
+int get_command_index(char *command);
+int get_operand_type(char *operand);
+int is_legal_operand_type(int *optional_operands, int operand_type);

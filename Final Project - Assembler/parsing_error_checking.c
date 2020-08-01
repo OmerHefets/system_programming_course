@@ -19,6 +19,21 @@ int check_command_exists(char *str)
     return exists;
 }
 
+int check_correct_register(char *str)
+{
+    int i, buffer_size;
+    if (str == NULL) {
+        return FALSE;
+    }
+    buffer_size = strlen(str);
+    for (i=0 ; i < 8 ; i++) {
+        if (!strncmp(str, registers[i], buffer_size)) {
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
 int check_correct_label(char *str)
 {
     int i=0;
@@ -159,4 +174,58 @@ int check_number_of_commas(char *s, int requested_amount_commas)
     } else {
         return TRUE;
     }
+}
+
+int check_instruction_arguments(char *line, char *command)
+{
+    char *delim = " \t";
+    char *token;
+    if (!strcmp(command, "stop") || !strcmp(command, "rts")) {
+        token = strtok(line, delim);
+        if (token == NULL) {
+            return TRUE;
+        } else {
+            return FALSE;
+        }
+    }
+    if (check_number_of_commas(line, opcodes_number_of_operands[get_command_index(command)] - 1)) {
+        if (opcodes_number_of_operands[get_command_index(command)] == 1) {
+            return check_one_operand_in_instruction(line, command);
+        } else {
+            return check_two_operands_in_instruction(line, command);
+        }
+    } else {
+        return FALSE;
+    }
+}
+
+int check_one_operand_in_instruction(char *line, char *command)
+{
+    char *delim = " ,\t";
+    char *token;
+    token = strtok(line, delim);
+    if (get_operand_type(token) != NONE) {
+        if (is_legal_operand_type(opcodes_second_operand[get_command_index(command)], get_operand_type(token))) {
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
+int check_two_operands_in_instruction(char *line, char *command)
+{
+    char *delim = " ,\t";
+    char *token;
+    token = strtok(line, delim);    
+    if (get_operand_type(token) != NONE) {
+        if (is_legal_operand_type(opcodes_first_operand[get_command_index(command)], get_operand_type(token))) {
+            token = strtok(NULL, delim);
+            if (get_operand_type(token) != NONE) {
+                if (is_legal_operand_type(opcodes_second_operand[get_command_index(command)], get_operand_type(token))) {
+                    return TRUE;
+                }
+            }
+        }
+    }
+    return FALSE;
 }

@@ -87,6 +87,37 @@ void test_analyze_first_buffer()
     printf("%d\n", result);
 }
 */
+void test_parse_line_first_pass_instructions()
+{
+    SymbolPtr head_symbol = NULL;
+    ExternPtr head_extern = NULL;
+    InstructionPtr head_instruction = NULL;
+    DataPtr head_data = NULL;
+    int *dc, *ic;
+    char line[] = " MAIN:   add  r3,LIST   ";
+    char line2[] = " HELLO:   add  r3   ";
+    char line3[] = " lel:   add  #593,r3     ";
+    char line4[] = " lel1:   add  r3,#593    ";
+    char line5[] = " lel2:   bne  &a19    ";
+    char line6[] = " lel3:   rts     ";
+    int *error, dcf=0, icf=100, is_error=0;
+    error = &is_error;
+    dc = &dcf;
+    ic = &icf;
+    parse_line_first_pass(line, error, &head_symbol, &head_extern, &head_instruction, &head_data, dc, ic);
+    parse_line_first_pass(line2, error, &head_symbol, &head_extern, &head_instruction, &head_data, dc, ic);
+    parse_line_first_pass(line3, error, &head_symbol, &head_extern, &head_instruction, &head_data, dc, ic);
+    parse_line_first_pass(line4, error, &head_symbol, &head_extern, &head_instruction, &head_data, dc, ic);
+    parse_line_first_pass(line5, error, &head_symbol, &head_extern, &head_instruction, &head_data, dc, ic);
+    parse_line_first_pass(line6, error, &head_symbol, &head_extern, &head_instruction, &head_data, dc, ic);
+    /*printf("%s\n", get_symbol_label(head_symbol->next));*/
+    printf("%d\n", *ic);
+    free_symbol_list(head_symbol);
+    free_extern_list(head_extern);
+    free_instruction_list(head_instruction);
+    free_data_list(head_data);
+}
+
 void test_parse_line_first_pass()
 {
     SymbolPtr head_symbol = NULL;
@@ -94,7 +125,7 @@ void test_parse_line_first_pass()
     InstructionPtr head_instruction = NULL;
     DataPtr head_data = NULL;
     int *dc, *ic;
-    char line[] = " .extern   j879hj";
+    char line[] = " MAIN:   add  r3,LIST   ";
     int *error, dcf=0, icf=0, is_error=0;
     error = &is_error;
     dc = &dcf;
@@ -131,8 +162,38 @@ void test_check_data_arguments()
         }    
 }
 
+void test_get_command_index()
+{
+        char *comm = "mov";
+        char *comm2 = "rts";
+        char *comm3 = "stop";
+        printf("%d\n", get_command_index(comm));
+        printf("%d\n", get_command_index(comm2));
+        printf("%d\n", get_command_index(comm3));
+}
+
+void test_get_operand_type()
+{
+        char *op1 = "r2";
+        char *op2 = "r9";
+        char *op3 = "#4h5";
+        char *op4 = "&hello";
+        char *op5 = "&5ello";
+        char *op6 = "hello";
+        char *op7 = "5eluklu8lo";
+        char *op8 = "hel&*o";
+        printf("%d\n", get_operand_type(op1));
+        printf("%d\n", get_operand_type(op2));
+        printf("%d\n", get_operand_type(op3));
+        printf("%d\n", get_operand_type(op4));
+        printf("%d\n", get_operand_type(op5));
+        printf("%d\n", get_operand_type(op6));
+        printf("%d\n", get_operand_type(op7));
+        printf("%d\n", get_operand_type(op8));
+}
+
 int main()
 {
-    test_parse_line_first_pass();
+    test_parse_line_first_pass_instructions();
     return 0;
 }
