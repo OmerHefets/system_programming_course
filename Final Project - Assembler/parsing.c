@@ -85,7 +85,7 @@ void parse_data_line(char line[], int index_of_arguments, DataPtr *data_head, in
     if (check_data_arguments(line_copy) == TRUE) {
         token = strtok(line+index_of_arguments, delim);
         while (token != NULL) {
-            add_data(data_head, *dc, atoi(token));
+            add_data(data_head, *dc, atol(token));
             token = strtok(NULL, delim);
             (*dc)++;
         }
@@ -107,6 +107,8 @@ void parse_string_line(char line[], int index_of_arguments, DataPtr *data_head, 
             token++;
             (*dc)++;
         }
+        add_data(data_head, *dc, 0);
+        (*dc)++;
     } else {
         *error_in_file = TRUE;
         fprintf(stdout, "Wrong argument for string: invalid argument.\n");
@@ -164,7 +166,7 @@ InstructionPtr *instruction_head, int* error_in_file, int *ic, char *line, int i
     }
     if(check_instruction_arguments(line_copy, command)) {
         printf("success\n");
-        /*...code the instructions that you can in the DB...*/
+        compile_instruction_line(line+index_of_arguments, command, symbol_head, instruction_head, ic);
     } else {
         fprintf(stdout, "Invalid arguments for this opcode instruction \n");
     }
@@ -208,13 +210,11 @@ int get_operand_type(char *operand)
     strncat(temp_operand, ":", 1);
     if (operand[0] == '#') {
         operand++;
-        while (*operand != '\0' && *operand != '\n') {
-            if(!isdigit(*operand)) {
-                return NONE;
-            }
-            operand++;
+        if (check_data_argument(operand) == FALSE) {
+            return NONE;
+        } else {
+            return 0;
         }
-        return 0;
     } else if (check_correct_label(temp_operand)) {
         return 1;
     }
@@ -226,6 +226,13 @@ int get_operand_type(char *operand)
         return 3;
     }
     return NONE;
+}
+
+long get_number_from_operand_adressing_zero(char *operand)
+{
+    char num_in_string[MAX_LABEL_SIZE] = "";
+    strncat(num_in_string, operand + 1, strlen(operand) - 1);
+    return atol(num_in_string);
 }
 
 int is_legal_operand_type(int *optional_operands, int operand_type)

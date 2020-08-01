@@ -96,7 +96,7 @@ void test_parse_line_first_pass_instructions()
     int *dc, *ic;
     char line[] = " MAIN:   add  r3,LIST   ";
     char line2[] = " HELLO:   add  r3   ";
-    char line3[] = " lel:   add  #593,r3     ";
+    char line3[] = " lel:   add  #+10,r3     ";
     char line4[] = " lel1:   add  r3,#593    ";
     char line5[] = " lel2:   bne  &a19    ";
     char line6[] = " lel3:   rts     ";
@@ -110,8 +110,11 @@ void test_parse_line_first_pass_instructions()
     parse_line_first_pass(line4, error, &head_symbol, &head_extern, &head_instruction, &head_data, dc, ic);
     parse_line_first_pass(line5, error, &head_symbol, &head_extern, &head_instruction, &head_data, dc, ic);
     parse_line_first_pass(line6, error, &head_symbol, &head_extern, &head_instruction, &head_data, dc, ic);
-    /*printf("%s\n", get_symbol_label(head_symbol->next));*/
+    printf("%s\n", get_symbol_label(head_symbol->next));
     printf("%d\n", *ic);
+    printf("%lu\n", get_instruction_command(head_instruction->next));
+    printf("%lu\n", get_instruction_command(head_instruction->next->next));
+    printf("%lu\n", get_instruction_command(head_instruction->next->next->next));
     free_symbol_list(head_symbol);
     free_extern_list(head_extern);
     free_instruction_list(head_instruction);
@@ -196,14 +199,23 @@ void test_code_are()
 {
     unsigned long int command = 0;
     char a= 'A', c='R';
-    command = code_are(command, a);
-    command = code_are(command, c);
+    code_are(&command, a);
+    code_are(&command, c);
     printf("%lu\n", command);
 }
 
+void test_get_register_index()
+{
+        char *reg1 = "r0";
+        char *reg2 = "r4";
+        char *reg3 = "r7";
+        printf("%d\n", get_register_index(reg1));
+        printf("%d\n", get_register_index(reg2));
+        printf("%d\n", get_register_index(reg3));
+}
 
 int main()
 {
-    test_code_are();
+    test_parse_line_first_pass_instructions();
     return 0;
 }

@@ -15,6 +15,8 @@
 #define DATA 1
 #define NONE -1
 #define UNLIMITED -1
+#define SRC 1
+#define DEST 0
 
 extern char *registers[];
 extern char *opcodes[];
@@ -146,10 +148,19 @@ InstructionPtr *instruction_head, int* error_in_file, int *ic, char *line, int i
 int get_command_index(char *command);
 int get_register_index(char *reg);
 int get_operand_type(char *operand);
+long get_number_from_operand_adressing_zero(char *operand);
 int is_legal_operand_type(int *optional_operands, int operand_type);
 
 
 /* compiling instructions */
 void compile_instruction_line(char *args_line, char *command, SymbolPtr *symbol_head, InstructionPtr *instruction_head, int *ic);
 void compile_instruction_line_zero_operands(char *command, SymbolPtr *symbol_head, InstructionPtr *instruction_head, int *ic);
-unsigned long int code_are(unsigned long command, char a_r_e);
+void compile_instruction_line_one_operand(char *args_line, char *command, SymbolPtr *symbol_head, InstructionPtr *instruction_head,
+int *ic);
+void compile_instruction_line_two_operands(char *args_line, char *command, SymbolPtr *symbol_head, InstructionPtr *instruction_head,
+int *ic);
+void compile_operand(char *operand, InstructionPtr *instruction_head, int *ic);
+void code_are(unsigned long int *command, char a_r_e);
+void code_funct(unsigned long int *command, char *command_name);
+void code_opcode(unsigned long int *command, char *command_name);
+void code_addressing_and_register(unsigned long int *command, char *operand, int src_or_dest);

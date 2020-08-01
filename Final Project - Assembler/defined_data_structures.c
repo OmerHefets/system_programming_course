@@ -18,4 +18,4 @@ int opcodes_second_operand[16][3] = {{1, 3, -1}, {0, 1, 3}, {1, 3, -1}, {1, 3, -
 
 char *data_operations[4] = {".data", ".string", ".entry", ".extern"};
 
-char *registers[8] = {"r1", "r2", "r3", "r4", "r5", "r6", "r7", "r8"};
+char *registers[8] = {"r0", "r1", "r2", "r3", "r4", "r5", "r6", "r7"};
