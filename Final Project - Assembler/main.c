@@ -90,20 +90,45 @@ void test_analyze_first_buffer()
 void test_parse_line_first_pass()
 {
     SymbolPtr head_symbol = NULL;
+    ExternPtr head_extern = NULL;
+    InstructionPtr head_instruction = NULL;
+    DataPtr head_data = NULL;
     int *dc, *ic;
-    char line[] = "Hello: .data 1,3,4       .";
-    int *error, a=0;
-    error = &a;
-    dc = &a;
-    ic = &a;
-    parse_line_first_pass(line, error, &head_symbol, dc, ic);
+    char line[] = " hello: .data  +5, 4,-8 , -4,8 ,4,4, 9, 10  ";
+    int *error, dcf=0, icf=0, is_error=0;
+    error = &is_error;
+    dc = &dcf;
+    ic = &icf;
+    parse_line_first_pass(line, error, &head_symbol, &head_extern, &head_instruction, &head_data, dc, ic);
     printf("%s\n", get_symbol_label(head_symbol));
-    if(head_symbol == NULL)
-    {
-        printf("shit\n");
-    }
+    printf("%d\n", *dc);
+    printf("%lu\n", get_data_memory(head_data->next->next->next));
     free_symbol_list(head_symbol);
+    free_extern_list(head_extern);
+    free_instruction_list(head_instruction);
+    free_data_list(head_data);
+}
 
+void test_check_number_of_commas()
+{
+        char *line = "  -1 , +5, 4,8 , 4,8 ,4,4, 9, 10   ";
+        if (check_number_of_commas(line, UNLIMITED)) {
+                printf("the string: %s is valid\n", line);
+        } else {
+                printf("the string: %s is invalid\n", line);
+        }
+}
+
+void test_check_data_arguments()
+{
+        char line[] = "  -1 , +5, 4,8   ";
+        char line_copy[MAX_LINE] = "";
+        strncat(line_copy, line, strlen(line));
+        if (check_data_arguments(line_copy)) {
+                printf("the string: %s is valid\n", line);
+        } else {
+                printf("the string: %s is invalid\n", line);
+        }    
 }
 
 int main()

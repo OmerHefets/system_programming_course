@@ -23,7 +23,8 @@ int analyze_first_buffer(char *token, char *label, int *error_in_file)
     return UNDEFINED; /* or return 0, need to think about it */
 }
 
-void parse_line_first_pass(char *line, int *error_in_file, SymbolPtr *symbol_head, int *dc, int *ic)
+void parse_line_first_pass(char *line, int *error_in_file, SymbolPtr *symbol_head, ExternPtr *extern_head,
+InstructionPtr *instruction_head, DataPtr *data_head, int *dc, int *ic)
 {
     char *delim = " \t";
     char *token;
@@ -45,8 +46,8 @@ void parse_line_first_pass(char *line, int *error_in_file, SymbolPtr *symbol_hea
         }
     }
     if (!strcmp(token, ".data") || !strcmp(token, ".string")) {
-        parse_string_or_data_line(optional_label, token, label_flag, symbol_head, error_in_file, dc, line_copy,
-        token + strlen(token) - line);
+        parse_string_or_data_line(optional_label, token, label_flag, symbol_head, data_head, error_in_file,
+        dc, line_copy, token + strlen(token) - line);
     } else if (!strcmp(token, ".entry") || !strcmp(token, ".extern")) {
         /*compile_entry_or_extern_line(token);*/
     } else { /* this is an operation */
@@ -54,8 +55,8 @@ void parse_line_first_pass(char *line, int *error_in_file, SymbolPtr *symbol_hea
     }
 }
 
-void parse_string_or_data_line(char *label, char *command, int label_flag, SymbolPtr *symbol_head, int* error_in_file, 
-int *dc, char *line, int index_of_arguments)
+void parse_string_or_data_line(char *label, char *command, int label_flag, SymbolPtr *symbol_head,
+DataPtr *data_head, int* error_in_file, int *dc, char *line, int index_of_arguments)
 {
     if (label_flag == TRUE) {
         if (check_label_duplication_in_symbols(label, *symbol_head) == FALSE) {
@@ -67,21 +68,27 @@ int *dc, char *line, int index_of_arguments)
         }
     }
     if (!strcmp(command, ".data")) {
-        parse_data_line(line, index_of_arguments, symbol_head, error_in_file, dc);
+        parse_data_line(line, index_of_arguments, data_head, error_in_file, dc);
     } else {  /* buffer is ".string" */
         /*compile_string_line();*/
     }
 }
 
-
-void parse_data_line(char *line, int index_of_arguments, SymbolPtr *symbol_head, int* error_in_file, int *dc)
+void parse_data_line(char line[], int index_of_arguments, DataPtr *data_head, int* error_in_file, int *dc)
 {
-    printf("%d", strlen(line));
-    printf("%s\n\n", line+index_of_arguments);
-    /*if (check_data_arguments(copy_token) == TRUE) {
-        ...code data in data memory + change DC...
+    char line_copy[MAX_LINE] = "";
+    char *delim = " \t,";
+    char *token;
+    strncat(line_copy, line+index_of_arguments, strlen(line));
+    if (check_data_arguments(line_copy) == TRUE) {
+        token = strtok(line+index_of_arguments, delim);
+        while (token != NULL) {
+            add_data(data_head, *dc, atoi(token));
+            token = strtok(NULL, delim);
+            (*dc)++;
+        }
     } else {
-        *no_errors = FALSE;
-        fprintf(stdout, "The numbers are not valid \n");
-    }*/
+        *error_in_file = TRUE;
+        fprintf(stdout, "Wrong arguments for data: invalid arguments or commas.\n");
+    }
 }

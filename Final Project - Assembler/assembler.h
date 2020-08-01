@@ -13,6 +13,7 @@
 #define UNDEFINED 0
 #define CODE 0
 #define DATA 1
+#define UNLIMITED -1
 
 extern char *registers[];
 extern char *opcodes[];
@@ -109,10 +110,15 @@ int check_label_duplication_in_symbols(char *label, SymbolPtr head_symbol_list);
 /* parsing error checking */
 int check_correct_label(char *str);
 int check_command_exists(char *str);
+int check_number_of_commas(char *s, int requested_amount);
+int check_data_arguments(char *line);
+int check_data_argument(char *arg);
+
 
 /* parsing */
 int analyze_first_buffer(char *token, char *label, int *error_in_file);
-void parse_line_first_pass(char *line, int *error_in_file, SymbolPtr *symbol_head, int *dc, int *ic);
-void parse_string_or_data_line(char *label, char *command, int label_flag, SymbolPtr *symbol_head, int* error_in_file, 
-int *dc, char *line, int index_of_arguments);
-void parse_data_line(char *line, int index_of_arguments, SymbolPtr *symbol_head, int* error_in_file, int *dc);
+void parse_line_first_pass(char *line, int *error_in_file, SymbolPtr *symbol_head, ExternPtr *extern_head,
+InstructionPtr *instruction_head, DataPtr *data_head, int *dc, int *ic);
+void parse_string_or_data_line(char *label, char *command, int label_flag, SymbolPtr *symbol_head,
+DataPtr *data_head, int* error_in_file, int *dc, char *line, int index_of_arguments);
+void parse_data_line(char *line, int index_of_arguments, DataPtr *data_head, int* error_in_file, int *dc);

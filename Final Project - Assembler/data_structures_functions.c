@@ -146,6 +146,8 @@ void add_data(DataPtr *head_data_list, unsigned long int memory, unsigned long i
 {
     DataPtr data_ptr = data_alloc();
     DataPtr temp = *head_data_list;
+    data_ptr->memory = memory;
+    data_ptr->data = data;
     data_ptr->next = NULL;
 
     if (temp == NULL) {
