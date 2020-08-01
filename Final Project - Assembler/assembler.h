@@ -144,5 +144,12 @@ InstructionPtr *instruction_head, int* error_in_file, int *ic, char *line, int i
 
 /* helper functions? */
 int get_command_index(char *command);
+int get_register_index(char *reg);
 int get_operand_type(char *operand);
 int is_legal_operand_type(int *optional_operands, int operand_type);
+
+
+/* compiling instructions */
+void compile_instruction_line(char *args_line, char *command, SymbolPtr *symbol_head, InstructionPtr *instruction_head, int *ic);
+void compile_instruction_line_zero_operands(char *command, SymbolPtr *symbol_head, InstructionPtr *instruction_head, int *ic);
+unsigned long int code_are(unsigned long command, char a_r_e);

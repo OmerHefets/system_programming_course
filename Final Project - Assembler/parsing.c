@@ -186,6 +186,17 @@ int get_command_index(char *command)
     return -1;
 }
 
+int get_register_index(char *reg)
+{
+    int i;
+    for (i=0 ; i < 8 ; i++) {
+        if (!strcmp(reg, registers[i])) {
+            return i;
+        }
+    }
+    return -1;
+}
+
 int get_operand_type(char *operand)
 {
     char temp_operand[MAX_LABEL_SIZE] = "";

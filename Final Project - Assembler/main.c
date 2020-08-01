@@ -192,8 +192,18 @@ void test_get_operand_type()
         printf("%d\n", get_operand_type(op8));
 }
 
+void test_code_are()
+{
+    unsigned long int command = 0;
+    char a= 'A', c='R';
+    command = code_are(command, a);
+    command = code_are(command, c);
+    printf("%lu\n", command);
+}
+
+
 int main()
 {
-    test_parse_line_first_pass_instructions();
+    test_code_are();
     return 0;
 }

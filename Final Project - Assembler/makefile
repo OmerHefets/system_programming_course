@@ -1,7 +1,7 @@
 assembler: main.o data_structures_functions.o parsing_error_checking.o defined_data_structures.o \
- parsing.o assembler.h
+ parsing.o compile_commands.o assembler.h
 	gcc -g -Wall -ansi -pedantic main.o data_structures_functions.o parsing_error_checking.o \
-	 defined_data_structures.o parsing.o assembler.h -o assembler
+	 defined_data_structures.o parsing.o compile_commands.o assembler.h -o assembler
 main.o: main.c assembler.h
 	gcc -c -Wall -ansi -pedantic main.c -o main.o
 data_structures_functions.o: data_structures_functions.c assembler.h
@@ -12,6 +12,8 @@ defined_data_structures.o: defined_data_structures.c assembler.h
 	gcc -c -Wall -ansi -pedantic defined_data_structures.c -o defined_data_structures.o
 parsing.o: parsing.c assembler.h
 	gcc -c -Wall -ansi -pedantic parsing.c -o parsing.o
+compile_commands.o: compile_commands.c assembler.h
+	gcc -c -Wall -ansi -pedantic compile_commands.c -o compile_commands.o
 
 
 # cleanup
