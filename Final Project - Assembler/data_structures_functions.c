@@ -340,3 +340,25 @@ void update_data_memory_in_data_table(DataPtr head_data_list, int ic)
         temp = temp->next;
     }
 }
+
+void print_instructions_to_file(FILE *ofp, InstructionPtr head_instruction)
+{
+    char buffer[MAX_LINE];
+    InstructionPtr temp = head_instruction;
+    while(temp != NULL) {
+        sprintf(buffer, "%07lu %06lx\n", temp->memory, (temp->command & 0xFFFFFFUL));
+        fputs(buffer, ofp);
+        temp = temp->next;
+    }
+}
+
+void print_data_to_file(FILE *ofp, DataPtr head_data)
+{
+    char buffer[MAX_LINE];
+    DataPtr temp = head_data;
+    while(temp != NULL) {
+        sprintf(buffer, "%07lu %06lx\n", temp->memory, (temp->data & 0xFFFFFFUL));
+        fputs(buffer, ofp);
+        temp = temp->next;
+    }
+}

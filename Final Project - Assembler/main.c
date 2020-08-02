@@ -185,7 +185,7 @@ void test_get_operand_type()
         char *op3 = "#4h5";
         char *op4 = "&hello";
         char *op5 = "&5ello";
-        char *op6 = "hello";
+        char *op6 = "HELLO";
         char *op7 = "5eluklu8lo";
         char *op8 = "hel&*o";
         printf("%d\n", get_operand_type(op1));

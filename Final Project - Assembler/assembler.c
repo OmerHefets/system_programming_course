@@ -21,13 +21,16 @@ void compile_multiple_files(int argc, char *argv[])
 
 void compile_file(FILE *ifp)
 {
+    /* print error by line in input */
     SymbolPtr head_symbol = NULL;
     ExternPtr head_extern = NULL;
     InstructionPtr head_instruction = NULL;
     DataPtr head_data = NULL;
-    int *dc, *ic, *errors_in_file, dcf = 0, icf = 100, error = FALSE;
+    int *dc, *ic, *errors_in_file, dcf = 0, icf = 100, error = FALSE, pos;
     dc = &dcf, ic = &icf, errors_in_file = &error;
+    pos = ftell(ifp);
     first_pass(ifp, &head_symbol, &head_extern, &head_instruction, &head_data, dc, ic, errors_in_file);
+    fseek(ifp, pos, SEEK_SET);
     /*
     if (no_errors = TRUE) {
         no_errors = second_maavar(...);
@@ -36,8 +39,7 @@ void compile_file(FILE *ifp)
         create_files(data_structures_declared);
     }
     */
-    printf("ic: %d  dc: %d, errors: %d\n", *ic, *dc, *errors_in_file);
-    printf("%s\n",get_symbol_label(head_symbol->next->next->next));
+    create_files(head_instruction, head_data, *ic, *dc);
     free_all_data_structures(head_symbol, head_extern, head_instruction, head_data);
 }
 

@@ -114,7 +114,6 @@ void code_addressing_and_register(unsigned long int *command, char *operand, int
         return;
     } else if (operand_type == 1) {
         coded_value = 8;
-        return;
     } else if (operand_type == 2) {
         coded_value = 16;
     } else {

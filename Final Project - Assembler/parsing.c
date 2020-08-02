@@ -34,9 +34,6 @@ InstructionPtr *instruction_head, DataPtr *data_head, int *dc, int *ic)
     char line_copy[MAX_LINE] = "";
     strncat(line_copy, line, strlen(line));
     token = strtok(line, delim);
-    if (token == NULL) {
-        return;
-    }
     buffer_type = analyze_first_buffer(token, optional_label, error_in_file);
     if (buffer_type ==  EMPTY_OR_COMMENT || buffer_type == UNDEFINED){
         return;
@@ -249,4 +246,3 @@ int is_legal_operand_type(int *optional_operands, int operand_type)
     }
     return FALSE;
 }
-

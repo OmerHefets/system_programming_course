@@ -116,6 +116,8 @@ void edit_data_data(DataPtr ptr, unsigned long int new_data);
 int check_label_duplication_in_symbols(char *label, SymbolPtr head_symbol_list);
 void update_data_memory_in_symbol_table(SymbolPtr head_symbol_list, int ic);
 void update_data_memory_in_data_table(DataPtr head_data_list, int ic);
+void print_instructions_to_file(FILE *ofp, InstructionPtr head_instruction);
+void print_data_to_file(FILE *ofp, DataPtr head_data);
 
 
 /* parsing error checking */
@@ -175,3 +177,19 @@ void first_pass(FILE *ifp, SymbolPtr *head_symbol, ExternPtr *head_extern, Instr
 DataPtr *head_data, int *dc, int *ic, int *errors_in_file);
 void free_all_data_structures(SymbolPtr head_symbol, ExternPtr head_extern, InstructionPtr head_instruction,
 DataPtr head_data);
+
+
+/* creating files */
+void create_files(InstructionPtr head_instruction, DataPtr head_data, int ic, int dc);
+void create_object_file(InstructionPtr head_instruction, DataPtr head_data, int ic, int dc);
+
+/* second pass */
+void parse_line_second_pass(char *line, int *error_in_file, SymbolPtr *symbol_head, ExternPtr *extern_head,
+InstructionPtr *instruction_head, DataPtr *data_head, int *dc, int *ic);
+int analyze_first_buffer_second_pass(char *token);
+void parse_entry_line_second_pass(SymbolPtr head_symbol, int *error_in_file, char *line, int index_of_arguments);
+void compile_instruction_line_second_pass(char *args_line, char *command, SymbolPtr symbol_head,
+InstructionPtr instruction_head, int *error_in_file, int *ic);
+void instruction_line_one_operand_second_pass(char *args_line, char *command, SymbolPtr symbol_head, InstructionPtr instruction_head,
+int *ic);
+void compile_operand_second_pass(char *operand, InstructionPtr instruction_head, int *ic);
