@@ -362,3 +362,21 @@ void print_data_to_file(FILE *ofp, DataPtr head_data)
         temp = temp->next;
     }
 }
+
+int search_entry_or_extern_symbol(SymbolPtr head_symbol, int entry_or_extern)
+{
+    SymbolPtr temp = head_symbol;
+    while (temp != NULL) {
+        if (entry_or_extern == ENTRY) {
+            if (temp->entry == TRUE) {
+                return TRUE;
+            }
+        } else {
+            if (temp->external == TRUE) {
+                return TRUE;
+            }
+        }
+        temp = temp->next;
+    }
+    return FALSE;
+}

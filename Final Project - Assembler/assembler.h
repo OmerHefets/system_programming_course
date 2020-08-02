@@ -18,6 +18,8 @@
 #define UNLIMITED -1
 #define SRC 1
 #define DEST 0
+#define ENTRY 1
+#define EXTERN 0
 
 extern char *registers[];
 extern char *opcodes[];
@@ -118,6 +120,7 @@ void update_data_memory_in_symbol_table(SymbolPtr head_symbol_list, int ic);
 void update_data_memory_in_data_table(DataPtr head_data_list, int ic);
 void print_instructions_to_file(FILE *ofp, InstructionPtr head_instruction);
 void print_data_to_file(FILE *ofp, DataPtr head_data);
+int search_entry_or_extern_symbol(SymbolPtr head_symbol, int entry_or_extern);
 
 
 /* parsing error checking */
@@ -175,21 +178,29 @@ void compile_multiple_files(int argc, char *argv[]);
 void compile_file(FILE *ifp);
 void first_pass(FILE *ifp, SymbolPtr *head_symbol, ExternPtr *head_extern, InstructionPtr *head_instruction,
 DataPtr *head_data, int *dc, int *ic, int *errors_in_file);
+void second_pass(FILE *ifp, SymbolPtr *head_symbol, ExternPtr *head_extern, InstructionPtr *head_instruction,
+DataPtr *head_data, int *ic, int *errors_in_file);
 void free_all_data_structures(SymbolPtr head_symbol, ExternPtr head_extern, InstructionPtr head_instruction,
 DataPtr head_data);
 
 
 /* creating files */
-void create_files(InstructionPtr head_instruction, DataPtr head_data, int ic, int dc);
+void create_files(SymbolPtr head_symbol, ExternPtr head_extern, InstructionPtr head_instruction,
+DataPtr head_data, int ic, int dc);
 void create_object_file(InstructionPtr head_instruction, DataPtr head_data, int ic, int dc);
+void create_entry_file(SymbolPtr head_symbol);
+void create_extern_file(ExternPtr head_extern, SymbolPtr head_symbol);
 
 /* second pass */
 void parse_line_second_pass(char *line, int *error_in_file, SymbolPtr *symbol_head, ExternPtr *extern_head,
-InstructionPtr *instruction_head, DataPtr *data_head, int *dc, int *ic);
+InstructionPtr *instruction_head, DataPtr *data_head, int *ic);
 int analyze_first_buffer_second_pass(char *token);
 void parse_entry_line_second_pass(SymbolPtr head_symbol, int *error_in_file, char *line, int index_of_arguments);
 void compile_instruction_line_second_pass(char *args_line, char *command, SymbolPtr symbol_head,
-InstructionPtr instruction_head, int *error_in_file, int *ic);
+InstructionPtr instruction_head, ExternPtr *extern_head, int *error_in_file, int *ic);
 void instruction_line_one_operand_second_pass(char *args_line, char *command, SymbolPtr symbol_head, InstructionPtr instruction_head,
-int *ic);
-void compile_operand_second_pass(char *operand, InstructionPtr instruction_head, int *ic);
+ExternPtr *extern_head, int *error_in_file ,int *ic);
+void instruction_line_two_operands_second_pass(char *args_line, char *command, SymbolPtr symbol_head, InstructionPtr instruction_head,
+ExternPtr *extern_head ,int *error_in_file, int *ic);
+void compile_operand_second_pass(char *operand, InstructionPtr instruction_head, SymbolPtr symbol_head,
+ExternPtr *extern_head, int *error_in_file, int *ic);

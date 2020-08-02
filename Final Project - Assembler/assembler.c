@@ -31,15 +31,17 @@ void compile_file(FILE *ifp)
     pos = ftell(ifp);
     first_pass(ifp, &head_symbol, &head_extern, &head_instruction, &head_data, dc, ic, errors_in_file);
     fseek(ifp, pos, SEEK_SET);
-    /*
-    if (no_errors = TRUE) {
-        no_errors = second_maavar(...);
+
+    if (*errors_in_file == FALSE) {
+        *ic = 100;
+        second_pass(ifp, &head_symbol, &head_extern, &head_instruction, &head_data, ic, errors_in_file);
     }
-    if (no_errors = TRUE) {
-        create_files(data_structures_declared);
+    if (*errors_in_file == FALSE) {
+        create_files(head_symbol, head_extern, head_instruction, head_data, *ic, *dc);
     }
-    */
-    create_files(head_instruction, head_data, *ic, *dc);
+    if (head_extern == NULL) {
+        printf("shhit");
+    }
     free_all_data_structures(head_symbol, head_extern, head_instruction, head_data);
 }
 
@@ -53,6 +55,16 @@ DataPtr *head_data, int *dc, int *ic, int *errors_in_file)
     }
     update_data_memory_in_symbol_table(*head_symbol, *ic);
     update_data_memory_in_data_table(*head_data, *ic);
+}
+
+void second_pass(FILE *ifp, SymbolPtr *head_symbol, ExternPtr *head_extern, InstructionPtr *head_instruction,
+DataPtr *head_data, int *ic, int *errors_in_file)
+{
+    char command_line[MAX_LINE];
+    while(fgets(command_line, MAX_LINE, ifp) != NULL) {
+        parse_line_second_pass(command_line, errors_in_file, head_symbol, head_extern, head_instruction,
+        head_data, ic);
+    }
 }
 
 void free_all_data_structures(SymbolPtr head_symbol, ExternPtr head_extern, InstructionPtr head_instruction,
