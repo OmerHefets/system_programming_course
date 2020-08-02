@@ -24,7 +24,7 @@ void compile_instruction_line_zero_operands(char *command, SymbolPtr *symbol_hea
 void compile_instruction_line_one_operand(char *args_line, char *command, SymbolPtr *symbol_head, InstructionPtr *instruction_head,
 int *ic)
 {
-    char *delim = " \t";
+    char *delim = " \t\n";
     char *token;
     unsigned long int command_value = 0;
     token = strtok(args_line, delim);
@@ -41,7 +41,7 @@ int *ic)
 void compile_instruction_line_two_operands(char *args_line, char *command, SymbolPtr *symbol_head, InstructionPtr *instruction_head,
 int *ic)
 {
-    char *delim = " \t,";
+    char *delim = " \t,\n";
     char *token;
     char two_tokens[2][MAX_LABEL_SIZE] = {"", ""};
     unsigned long int command_value = 0;

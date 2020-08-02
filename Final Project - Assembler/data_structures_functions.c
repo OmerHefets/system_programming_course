@@ -320,3 +320,23 @@ int check_label_duplication_in_symbols(char *label, SymbolPtr head_symbol_list)
     }
     return duplication_exists;
 }
+
+void update_data_memory_in_symbol_table(SymbolPtr head_symbol_list, int ic)
+{
+    SymbolPtr temp = head_symbol_list;
+    while (temp != NULL) {
+        if (temp->code_or_data == DATA) {
+            temp->memory += ic;
+        }
+        temp = temp->next;
+    }
+}
+
+void update_data_memory_in_data_table(DataPtr head_data_list, int ic)
+{
+    DataPtr temp = head_data_list;
+    while (temp != NULL) {
+        temp->memory += ic;
+        temp = temp->next;
+    }
+}

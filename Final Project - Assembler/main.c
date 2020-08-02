@@ -96,10 +96,12 @@ void test_parse_line_first_pass_instructions()
     int *dc, *ic;
     char line[] = " MAIN:   add  r3,LIST   ";
     char line2[] = " HELLO:   add  r3   ";
-    char line3[] = " lel:   add  #+10,r3     ";
-    char line4[] = " lel1:   add  r3,#593    ";
-    char line5[] = " lel2:   bne  &a19    ";
-    char line6[] = " lel3:   rts     ";
+    char line3[] = "    ;add  #+10,r3     ";
+    char line4[] = "  add  r3,#593    ";
+    char line5[] = " .data 10,30,-20, -19, 50  ";
+    char line6[] = " lel2:   bne  &a19    ";
+    char line7[] = " lel3:   rts     ";
+    char line8[] = " LE7L: .string \"abc\"  ";
     int *error, dcf=0, icf=100, is_error=0;
     error = &is_error;
     dc = &dcf;
@@ -110,11 +112,12 @@ void test_parse_line_first_pass_instructions()
     parse_line_first_pass(line4, error, &head_symbol, &head_extern, &head_instruction, &head_data, dc, ic);
     parse_line_first_pass(line5, error, &head_symbol, &head_extern, &head_instruction, &head_data, dc, ic);
     parse_line_first_pass(line6, error, &head_symbol, &head_extern, &head_instruction, &head_data, dc, ic);
+    parse_line_first_pass(line7, error, &head_symbol, &head_extern, &head_instruction, &head_data, dc, ic);
+    parse_line_first_pass(line8, error, &head_symbol, &head_extern, &head_instruction, &head_data, dc, ic);
     printf("%s\n", get_symbol_label(head_symbol->next));
-    printf("%d\n", *ic);
-    printf("%lu\n", get_instruction_command(head_instruction->next));
-    printf("%lu\n", get_instruction_command(head_instruction->next->next));
-    printf("%lu\n", get_instruction_command(head_instruction->next->next->next));
+    printf("ic: %d\n", *ic);
+    printf("dc: %d\n", *dc);
+    printf("%lu\n", get_data_data(get_data_by_memory(head_data, 4)));
     free_symbol_list(head_symbol);
     free_extern_list(head_extern);
     free_instruction_list(head_instruction);
@@ -214,8 +217,8 @@ void test_get_register_index()
         printf("%d\n", get_register_index(reg3));
 }
 
-int main()
+int main(int argc, char *argv[])
 {
-    test_parse_line_first_pass_instructions();
+    compile_multiple_files(argc, argv);
     return 0;
 }

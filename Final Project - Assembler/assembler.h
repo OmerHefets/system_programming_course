@@ -6,7 +6,8 @@
 #define TRUE 1
 #define FALSE 0
 #define MAX_LABEL_SIZE 33 /* max size of label is 31, and added ':' and '/0' at the end of the label */
-#define MAX_LINE 80
+#define MAX_LINE 81 /* maxline is 80 + 1 char for a newline */
+#define MAX_FILE_NAME 30
 #define LABEL 1
 #define COMMAND 2
 #define EMPTY_OR_COMMENT 0
@@ -113,6 +114,8 @@ void edit_data_memory(DataPtr ptr, unsigned long int new_memory);
 void edit_data_data(DataPtr ptr, unsigned long int new_data);
 
 int check_label_duplication_in_symbols(char *label, SymbolPtr head_symbol_list);
+void update_data_memory_in_symbol_table(SymbolPtr head_symbol_list, int ic);
+void update_data_memory_in_data_table(DataPtr head_data_list, int ic);
 
 
 /* parsing error checking */
@@ -164,3 +167,11 @@ void code_are(unsigned long int *command, char a_r_e);
 void code_funct(unsigned long int *command, char *command_name);
 void code_opcode(unsigned long int *command, char *command_name);
 void code_addressing_and_register(unsigned long int *command, char *operand, int src_or_dest);
+
+/* assembler */
+void compile_multiple_files(int argc, char *argv[]);
+void compile_file(FILE *ifp);
+void first_pass(FILE *ifp, SymbolPtr *head_symbol, ExternPtr *head_extern, InstructionPtr *head_instruction,
+DataPtr *head_data, int *dc, int *ic, int *errors_in_file);
+void free_all_data_structures(SymbolPtr head_symbol, ExternPtr head_extern, InstructionPtr head_instruction,
+DataPtr head_data);

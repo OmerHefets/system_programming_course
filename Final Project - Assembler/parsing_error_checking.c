@@ -75,7 +75,7 @@ int check_correct_label(char *str)
 
 int check_data_arguments(char line[])
 {
-    char *delim = " \t,";
+    char *delim = " \t,\n";
     char *token;
     if (check_number_of_commas(line, UNLIMITED)) {
         token = strtok(line, delim);
@@ -126,7 +126,7 @@ int check_string_argument(char *line)
 
 int check_extern_argument(char *line)
 {
-    char *delim = " \t";
+    char *delim = " \t\n";
     char *token, temp_token[MAX_LABEL_SIZE];
     token = strtok(line, delim);
     if (token == NULL) {
@@ -178,7 +178,7 @@ int check_number_of_commas(char *s, int requested_amount_commas)
 
 int check_instruction_arguments(char *line, char *command)
 {
-    char *delim = " \t";
+    char *delim = " \t\n";
     char *token;
     if (!strcmp(command, "stop") || !strcmp(command, "rts")) {
         token = strtok(line, delim);
