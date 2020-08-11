@@ -42,6 +42,7 @@ InstructionPtr *instruction_head, DataPtr *data_head, int *dc, int *ic)
         label_flag = TRUE;
         token = strtok(NULL, delim);
         if (!check_command_exists(token)) {
+            *error_in_file = TRUE;
             fprintf(stdout, "Line %d: command doesn't exist. \n", __LINE__);
             return;
         }

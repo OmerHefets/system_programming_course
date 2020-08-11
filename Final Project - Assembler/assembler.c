@@ -39,9 +39,6 @@ void compile_file(FILE *ifp)
     if (*errors_in_file == FALSE) {
         create_files(head_symbol, head_extern, head_instruction, head_data, *ic, *dc);
     }
-    if (head_extern == NULL) {
-        printf("shhit");
-    }
     free_all_data_structures(head_symbol, head_extern, head_instruction, head_data);
 }
 
