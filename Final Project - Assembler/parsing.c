@@ -258,11 +258,19 @@ int is_legal_filename_length(char *file_name)
     return TRUE;
 }
 
-int add_suffix_to_file(char *file_name, char *file_name_with_suffix)
+int add_suffix_to_file(char *file_name, char *file_name_with_suffix, int suffix)
 {
     if(is_legal_filename_length(file_name)) {
         strncpy(file_name_with_suffix, file_name, strlen(file_name));
-        strncat(file_name_with_suffix, ".as", 3);
+        if (suffix == FILENAME_SUFFIX) {
+            strncat(file_name_with_suffix, ".as", 3);
+        } else if (suffix == OBJECT_OUTPUT) {
+            strncat(file_name_with_suffix, ".ob", 3);
+        } else if (suffix == ENTRY_OUTPUT) {
+            strncat(file_name_with_suffix, ".ent", 4);
+        } else if (suffix == EXTERN_OUTPUT) {
+            strncat(file_name_with_suffix, ".ext", 4);
+        }
         return TRUE;
     } else {
         return FALSE;

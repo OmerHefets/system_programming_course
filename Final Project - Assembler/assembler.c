@@ -9,22 +9,21 @@ void compile_multiple_files(int argc, char *argv[])
         fprintf(stdout, "The assembler didn't get any files.\n");
     }
     while (--argc > 0) {
-        if(!add_suffix_to_file(*++argv, file_name)) {
+        if(!add_suffix_to_file(*++argv, file_name, FILENAME_SUFFIX)) {
             fprintf(stdout, "%s: can't open %s because file name is too long", prog_name, argv[0]);
         }
         else if ((ifp = fopen(file_name, "r")) == NULL) {
             fprintf(stdout, "%s: can't open %s for reading\n", prog_name, argv[0]);
         } else {
-            compile_file(ifp);
+            compile_file(ifp, argv[0]);
             fclose(ifp);
         }
         memset(file_name, 0, strlen(file_name));
     }
 }
 
-void compile_file(FILE *ifp)
+void compile_file(FILE *ifp, char *file_name)
 {
-    /* print error by line in input */
     SymbolPtr head_symbol = NULL;
     ExternPtr head_extern = NULL;
     InstructionPtr head_instruction = NULL;
@@ -40,7 +39,7 @@ void compile_file(FILE *ifp)
         second_pass(ifp, &head_symbol, &head_extern, &head_instruction, &head_data, ic, errors_in_file);
     }
     if (*errors_in_file == FALSE) {
-        create_files(head_symbol, head_extern, head_instruction, head_data, *ic, *dc);
+        create_files(head_symbol, head_extern, head_instruction, head_data, *ic, *dc, file_name);
     }
     free_all_data_structures(head_symbol, head_extern, head_instruction, head_data);
 }

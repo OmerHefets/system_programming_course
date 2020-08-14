@@ -8,7 +8,7 @@
 #define MAX_LABEL_SIZE 33 /* max size of label is 31, and added ':' and '/0' at the end of the label */
 #define MAX_LINE 81 /* maxline is 80 + 1 char for a newline */
 #define MAX_FILE_NAME 30 /* 30 chars for the file name */
-#define MAX_FILE_NAME_WITH_SUFFIX 34 /* 30 chars for the file name and 4 chars for the suffix + '\0' */
+#define MAX_FILE_NAME_WITH_SUFFIX 35 /* 30 chars for the file name and 5 chars for the suffix + '\0' */
 #define LABEL 1
 #define COMMAND 2
 #define EMPTY_OR_COMMENT 0
@@ -21,6 +21,10 @@
 #define DEST 0
 #define ENTRY 1
 #define EXTERN 0
+#define FILENAME_SUFFIX 0
+#define OBJECT_OUTPUT 1
+#define ENTRY_OUTPUT 2
+#define EXTERN_OUTPUT 3
 
 extern char *registers[];
 extern char *opcodes[];
@@ -152,7 +156,7 @@ int *error_in_file, int corrent_line);
 void parse_operation_line(char *label, char *command, int label_flag, SymbolPtr *symbol_head,
 InstructionPtr *instruction_head, int* error_in_file, int *ic, char *line, int index_of_arguments, int corrent_line);
 int is_legal_filename_length(char *file_name);
-int add_suffix_to_file(char *file_name, char *file_name_with_suffix);
+int add_suffix_to_file(char *file_name, char *file_name_with_suffix, int suffix);
 
 
 /* helper functions? */
@@ -178,7 +182,7 @@ void code_addressing_and_register(unsigned long int *command, char *operand, int
 
 /* assembler */
 void compile_multiple_files(int argc, char *argv[]);
-void compile_file(FILE *ifp);
+void compile_file(FILE *ifp, char *file_name);
 void first_pass(FILE *ifp, SymbolPtr *head_symbol, ExternPtr *head_extern, InstructionPtr *head_instruction,
 DataPtr *head_data, int *dc, int *ic, int *errors_in_file);
 void second_pass(FILE *ifp, SymbolPtr *head_symbol, ExternPtr *head_extern, InstructionPtr *head_instruction,
@@ -189,10 +193,10 @@ DataPtr head_data);
 
 /* creating files */
 void create_files(SymbolPtr head_symbol, ExternPtr head_extern, InstructionPtr head_instruction,
-DataPtr head_data, int ic, int dc);
-void create_object_file(InstructionPtr head_instruction, DataPtr head_data, int ic, int dc);
-void create_entry_file(SymbolPtr head_symbol);
-void create_extern_file(ExternPtr head_extern, SymbolPtr head_symbol);
+DataPtr head_data, int ic, int dc, char *file_name);
+void create_object_file(InstructionPtr head_instruction, DataPtr head_data, int ic, int dc, char *file_name);
+void create_entry_file(SymbolPtr head_symbol, char *file_name);
+void create_extern_file(ExternPtr head_extern, SymbolPtr head_symbol, char *file_name);
 
 /* second pass */
 void parse_line_second_pass(char *line, int *error_in_file, SymbolPtr *symbol_head, ExternPtr *extern_head,
