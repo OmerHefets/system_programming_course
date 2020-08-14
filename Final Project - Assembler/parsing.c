@@ -1,7 +1,7 @@
 #include "assembler.h"
 
 
-int analyze_first_buffer(char *token, char *label, int *error_in_file)
+int analyze_first_buffer(char *token, char *label, int *error_in_file, int corrent_line)
 {
     int local_error=TRUE;
 
@@ -18,14 +18,14 @@ int analyze_first_buffer(char *token, char *label, int *error_in_file)
     }
     if (local_error) {
         *error_in_file = TRUE;
-        fprintf(stdout, "Line %d: first argument inline is incorrect - not a defined label or command. \n",
-        __LINE__);
+        fprintf(stdout, "Line %d in file: first argument inline is incorrect - not a defined label or command. \n",
+        corrent_line);
     }
     return UNDEFINED; /* or return 0, need to think about it */
 }
 
 void parse_line_first_pass(char *line, int *error_in_file, SymbolPtr *symbol_head, ExternPtr *extern_head,
-InstructionPtr *instruction_head, DataPtr *data_head, int *dc, int *ic)
+InstructionPtr *instruction_head, DataPtr *data_head, int *dc, int *ic, int corrent_line)
 {
     char *delim = " \t\n";
     char *token;
@@ -34,7 +34,7 @@ InstructionPtr *instruction_head, DataPtr *data_head, int *dc, int *ic)
     char line_copy[MAX_LINE] = "";
     strncat(line_copy, line, strlen(line));
     token = strtok(line, delim);
-    buffer_type = analyze_first_buffer(token, optional_label, error_in_file);
+    buffer_type = analyze_first_buffer(token, optional_label, error_in_file, corrent_line);
     if (buffer_type ==  EMPTY_OR_COMMENT || buffer_type == UNDEFINED){
         return;
     }
@@ -43,42 +43,43 @@ InstructionPtr *instruction_head, DataPtr *data_head, int *dc, int *ic)
         token = strtok(NULL, delim);
         if (!check_command_exists(token)) {
             *error_in_file = TRUE;
-            fprintf(stdout, "Line %d: command doesn't exist. \n", __LINE__);
+            fprintf(stdout, "Line %d in file: command doesn't exist. \n", corrent_line);
             return;
         }
     }
     if (!strcmp(token, ".data") || !strcmp(token, ".string")) {
         parse_string_or_data_line(optional_label, token, label_flag, symbol_head, data_head, error_in_file,
-        dc, line_copy, token + strlen(token) - line);
+        dc, line_copy, token + strlen(token) - line, corrent_line);
     } else if (!strcmp(token, ".entry") || !strcmp(token, ".extern")) {
         parse_entry_or_extern_line(token, extern_head, symbol_head, error_in_file, line_copy,
-        token + strlen(token) - line);
+        token + strlen(token) - line, corrent_line);
     } else { /* this is an operation */
         parse_operation_line(optional_label, token, label_flag, symbol_head, instruction_head, error_in_file, ic,
-        line_copy, token + strlen(token) - line);
+        line_copy, token + strlen(token) - line, corrent_line);
     }
 }
 
 void parse_string_or_data_line(char *label, char *command, int label_flag, SymbolPtr *symbol_head,
-DataPtr *data_head, int* error_in_file, int *dc, char *line, int index_of_arguments)
+DataPtr *data_head, int* error_in_file, int *dc, char *line, int index_of_arguments, int corrent_line)
 {
     if (label_flag == TRUE) {
         if (check_label_duplication_in_symbols(label, *symbol_head) == FALSE) {
             add_symbol(symbol_head, label, strlen(label), *dc, DATA, FALSE, FALSE);
         } else {  
             *error_in_file = TRUE;
-            fprintf(stdout, "Line %d: This label already exists! \n", __LINE__);
+            fprintf(stdout, "Line %d in file: This label already exists! \n", corrent_line);
             return;
         }
     }
     if (!strcmp(command, ".data")) {
-        parse_data_line(line, index_of_arguments, data_head, error_in_file, dc);
+        parse_data_line(line, index_of_arguments, data_head, error_in_file, dc, corrent_line);
     } else {  /* buffer is ".string" */
-        parse_string_line(line, index_of_arguments, data_head, error_in_file, dc);
+        parse_string_line(line, index_of_arguments, data_head, error_in_file, dc, corrent_line);
     }
 }
 
-void parse_data_line(char line[], int index_of_arguments, DataPtr *data_head, int* error_in_file, int *dc)
+void parse_data_line(char line[], int index_of_arguments, DataPtr *data_head, int* error_in_file, int *dc,
+int corrent_line)
 {
     char line_copy[MAX_LINE] = "";
     char *delim = " \t,\n";
@@ -93,11 +94,12 @@ void parse_data_line(char line[], int index_of_arguments, DataPtr *data_head, in
         }
     } else {
         *error_in_file = TRUE;
-        fprintf(stdout, "Line %d: Wrong arguments for data: invalid arguments or commas.\n", __LINE__);
+        fprintf(stdout, "Line %d in file: Wrong arguments for data: invalid arguments or commas.\n", corrent_line);
     }
 }
 
-void parse_string_line(char line[], int index_of_arguments, DataPtr *data_head, int* error_in_file, int *dc)
+void parse_string_line(char line[], int index_of_arguments, DataPtr *data_head, int* error_in_file, int *dc,
+int corrent_line)
 {
     char *delim = " \t\n";
     char *token;
@@ -113,22 +115,22 @@ void parse_string_line(char line[], int index_of_arguments, DataPtr *data_head, 
         (*dc)++;
     } else {
         *error_in_file = TRUE;
-        fprintf(stdout, "Line %d: Wrong argument for string: invalid argument.\n", __LINE__);
+        fprintf(stdout, "Line %d in file: Wrong argument for string: invalid argument.\n", corrent_line);
     }
 }
 
 void parse_entry_or_extern_line(char *command, ExternPtr *extern_head, SymbolPtr *symbol_head, int* error_in_file,
-char *line, int index_of_arguments)
+char *line, int index_of_arguments, int corrent_line)
 {
     if (!strcmp(command, ".entry")) {
         return;
     } else {
-        parse_extern_line(line, index_of_arguments, extern_head, symbol_head, error_in_file);
+        parse_extern_line(line, index_of_arguments, extern_head, symbol_head, error_in_file, corrent_line);
     }
 }
 
 void parse_extern_line(char *line, int index_of_arguments, ExternPtr *extern_head, SymbolPtr *symbol_head,
-int *error_in_file)
+int *error_in_file, int corrent_line)
 {
     char line_copy[MAX_LINE] = "";
     char *delim = " \t\n";
@@ -143,17 +145,17 @@ int *error_in_file)
             optional_existing_label = get_symbol_by_label(*symbol_head, token);
             if (get_symbol_external(optional_existing_label) == FALSE) {
                 *error_in_file = TRUE;
-                fprintf(stdout, "Line %d: This label already exists, and not as external.\n", __LINE__);
+                fprintf(stdout, "Line %d in file: This label already exists, and not as external.\n", corrent_line);
             }
         }
     } else {
         *error_in_file = TRUE;
-        fprintf(stdout, "Line %d: Wrong argument for extern: invalid argument.\n", __LINE__);
+        fprintf(stdout, "Line %d in file: Wrong argument for extern: invalid argument.\n", corrent_line);
     }
 }
 
 void parse_operation_line(char *label, char *command, int label_flag, SymbolPtr *symbol_head,
-InstructionPtr *instruction_head, int* error_in_file, int *ic, char *line, int index_of_arguments)
+InstructionPtr *instruction_head, int* error_in_file, int *ic, char *line, int index_of_arguments, int corrent_line)
 {
     char line_copy[MAX_LINE] = "";
     strncat(line_copy, line+index_of_arguments, strlen(line));
@@ -162,7 +164,7 @@ InstructionPtr *instruction_head, int* error_in_file, int *ic, char *line, int i
             add_symbol(symbol_head, label, strlen(label), *ic, CODE, FALSE, FALSE);
         } else {  
             *error_in_file = TRUE;
-            fprintf(stdout, "Line %d: This label already exists! \n", __LINE__);
+            fprintf(stdout, "Line %d in file: This label already exists. \n", corrent_line);
             return;
         }
     }
@@ -170,7 +172,7 @@ InstructionPtr *instruction_head, int* error_in_file, int *ic, char *line, int i
         compile_instruction_line(line+index_of_arguments, command, symbol_head, instruction_head, ic);
     } else {
         *error_in_file = TRUE;
-        fprintf(stdout, "Line %d: Invalid arguments for this opcode instruction \n", __LINE__);
+        fprintf(stdout, "Line %d in file: Invalid arguments for this opcode instruction \n", corrent_line);
     }
 }
 

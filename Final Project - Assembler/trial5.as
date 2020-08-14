@@ -2,7 +2,7 @@
 .entry T
 .entry T
 
-clr DATA
+clr DATa
 inc T
 DATA: .data 10
 .extern T

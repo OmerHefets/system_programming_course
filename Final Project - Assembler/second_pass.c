@@ -1,7 +1,7 @@
 #include "assembler.h"
 
 void parse_line_second_pass(char *line, int *error_in_file, SymbolPtr *symbol_head, ExternPtr *extern_head,
-InstructionPtr *instruction_head, DataPtr *data_head, int *ic)
+InstructionPtr *instruction_head, DataPtr *data_head, int *ic, int corrent_line)
 {
     char *delim = " \t\n";
     char *token;
@@ -21,10 +21,10 @@ InstructionPtr *instruction_head, DataPtr *data_head, int *ic)
     if (!strcmp(token, ".data") || !strcmp(token, ".string") || !strcmp(token, ".extern")) {
         return;
     } else if (!strcmp(token, ".entry")) {
-        parse_entry_line_second_pass(*symbol_head, error_in_file, line_copy, index_of_arguments);
+        parse_entry_line_second_pass(*symbol_head, error_in_file, line_copy, index_of_arguments, corrent_line);
     } else { /* this is an operation */
         compile_instruction_line_second_pass(line_copy+index_of_arguments, token, *symbol_head,
-        *instruction_head, extern_head, error_in_file, ic);
+        *instruction_head, extern_head, error_in_file, ic, corrent_line);
     }    
 }
 
@@ -41,7 +41,7 @@ int analyze_first_buffer_second_pass(char *token)
     return UNDEFINED; /* or return 0, need to think about it */
 }
 
-void parse_entry_line_second_pass(SymbolPtr head_symbol, int *error_in_file, char *line, int index_of_arguments)
+void parse_entry_line_second_pass(SymbolPtr head_symbol, int *error_in_file, char *line, int index_of_arguments, int corrent_line)
 {
     char line_copy[MAX_LINE] = "";
     char *delim = " \t\n";
@@ -55,13 +55,13 @@ void parse_entry_line_second_pass(SymbolPtr head_symbol, int *error_in_file, cha
             edit_symbol_entry(optional_existing_label, TRUE);
         } else {
             *error_in_file = TRUE;
-            fprintf(stdout, "The label of entry doesn\'t exist in the file.\n");
+            fprintf(stdout, "Line %d in file: The label of entry doesn\'t exist in the file.\n", corrent_line);
         }
     }
 }
 
 void compile_instruction_line_second_pass(char *args_line, char *command, SymbolPtr symbol_head,
-InstructionPtr instruction_head, ExternPtr *extern_head, int *error_in_file, int *ic)
+InstructionPtr instruction_head, ExternPtr *extern_head, int *error_in_file, int *ic, int corrent_line)
 {
     int num_of_operands = opcodes_number_of_operands[get_command_index(command)];
     (*ic)++;
@@ -69,24 +69,24 @@ InstructionPtr instruction_head, ExternPtr *extern_head, int *error_in_file, int
         return;
     } else if (num_of_operands == 1) {
         instruction_line_one_operand_second_pass(args_line, command, symbol_head, instruction_head,
-        extern_head, error_in_file, ic);
+        extern_head, error_in_file, ic, corrent_line);
     } else {
         instruction_line_two_operands_second_pass(args_line, command, symbol_head, instruction_head,
-        extern_head, error_in_file, ic);
+        extern_head, error_in_file, ic, corrent_line);
     }
 }
 
 void instruction_line_one_operand_second_pass(char *args_line, char *command, SymbolPtr symbol_head, InstructionPtr instruction_head,
-ExternPtr *extern_head, int *error_in_file ,int *ic)
+ExternPtr *extern_head, int *error_in_file ,int *ic, int corrent_line)
 {
     char *delim = " \t\n";
     char *token;
     token = strtok(args_line, delim);
-    compile_operand_second_pass(token, instruction_head, symbol_head, extern_head, error_in_file, ic);
+    compile_operand_second_pass(token, instruction_head, symbol_head, extern_head, error_in_file, ic, corrent_line);
 }
 
 void instruction_line_two_operands_second_pass(char *args_line, char *command, SymbolPtr symbol_head, InstructionPtr instruction_head,
-ExternPtr *extern_head ,int *error_in_file, int *ic)
+ExternPtr *extern_head ,int *error_in_file, int *ic, int corrent_line)
 { 
     char *delim = " \t,\n";
     char *token;
@@ -95,12 +95,12 @@ ExternPtr *extern_head ,int *error_in_file, int *ic)
     strncat(two_tokens[0], token, 20);
     token = strtok(NULL, delim);
     strncat(two_tokens[1], token, 20);
-    compile_operand_second_pass(two_tokens[0], instruction_head, symbol_head, extern_head, error_in_file, ic);
-    compile_operand_second_pass(two_tokens[1], instruction_head, symbol_head, extern_head, error_in_file, ic);
+    compile_operand_second_pass(two_tokens[0], instruction_head, symbol_head, extern_head, error_in_file, ic, corrent_line);
+    compile_operand_second_pass(two_tokens[1], instruction_head, symbol_head, extern_head, error_in_file, ic, corrent_line);
 }
 
 void compile_operand_second_pass(char *operand, InstructionPtr instruction_head, SymbolPtr symbol_head,
-ExternPtr *extern_head, int *error_in_file, int *ic)
+ExternPtr *extern_head, int *error_in_file, int *ic, int corrent_line)
 {
     unsigned long int command_value = 0;
     int operand_type = get_operand_type(operand);
@@ -108,32 +108,34 @@ ExternPtr *extern_head, int *error_in_file, int *ic)
     if (operand_type == 1) {
         if (check_label_duplication_in_symbols(operand, symbol_head) == FALSE) {
             *error_in_file = TRUE;
-            fprintf(stdout, "Label doesn\'t exists.\n");
-        }
-        command_value = get_symbol_memory(get_symbol_by_label(symbol_head, operand));
-        command_value <<= 3;
-        if (get_symbol_external(get_symbol_by_label(symbol_head, operand))) {
-            code_are(&command_value, 'E');
+            fprintf(stdout, "Line %d in file: Label doesn\'t exists.\n", corrent_line);
         } else {
-            code_are(&command_value, 'R');
-        }
-        edit_instruction_command(get_instruction_by_memory(instruction_head, *ic), command_value);
-        if (get_symbol_external(get_symbol_by_label(symbol_head, operand)) == TRUE) {
-            add_extern(extern_head, operand, strlen(operand), *ic);
+            command_value = get_symbol_memory(get_symbol_by_label(symbol_head, operand));
+            command_value <<= 3;
+            if (get_symbol_external(get_symbol_by_label(symbol_head, operand))) {
+                code_are(&command_value, 'E');
+            } else {
+                code_are(&command_value, 'R');
+            }
+            edit_instruction_command(get_instruction_by_memory(instruction_head, *ic), command_value);
+            if (get_symbol_external(get_symbol_by_label(symbol_head, operand)) == TRUE) {
+                add_extern(extern_head, operand, strlen(operand), *ic);
+            }
         }
     } else if (operand_type == 2) {
         if (check_label_duplication_in_symbols(operand+1, symbol_head) == FALSE) {
             *error_in_file = TRUE;
-            fprintf(stdout, "Label doesn\'t exists.\n");
-        }
-        command_value = (get_symbol_memory(get_symbol_by_label(symbol_head, operand+1)) - *ic + 1);
-        command_value <<= 3;
-        code_are(&command_value, 'A');
-        if (get_symbol_external(get_symbol_by_label(symbol_head, operand+1)) == TRUE) {
-            *error_in_file = TRUE;
-            fprintf(stdout, "Using Adressing method 2 on an external label is incorrect.\n");
+            fprintf(stdout, "Line %d in file: Label doesn\'t exists.\n", corrent_line);
         } else {
-            edit_instruction_command(get_instruction_by_memory(instruction_head, *ic), command_value);
+            command_value = (get_symbol_memory(get_symbol_by_label(symbol_head, operand+1)) - *ic + 1);
+            command_value <<= 3;
+            code_are(&command_value, 'A');
+            if (get_symbol_external(get_symbol_by_label(symbol_head, operand+1)) == TRUE) {
+                *error_in_file = TRUE;
+                fprintf(stdout, "Line %d in file: Using Adressing method 2 on an external label is incorrect.\n", corrent_line);
+            } else {
+                edit_instruction_command(get_instruction_by_memory(instruction_head, *ic), command_value);
+            }
         }
     }
     if (operand_type != 3) {

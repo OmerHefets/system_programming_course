@@ -29,7 +29,7 @@ void compile_file(FILE *ifp)
     ExternPtr head_extern = NULL;
     InstructionPtr head_instruction = NULL;
     DataPtr head_data = NULL;
-    int *dc, *ic, *errors_in_file, dcf = 0, icf = 100, error = FALSE, pos, corrent_line = 1;
+    int *dc, *ic, *errors_in_file, dcf = 0, icf = 100, error = FALSE, pos;
     dc = &dcf, ic = &icf, errors_in_file = &error;
     pos = ftell(ifp);
     first_pass(ifp, &head_symbol, &head_extern, &head_instruction, &head_data, dc, ic, errors_in_file);
@@ -49,9 +49,11 @@ void first_pass(FILE *ifp, SymbolPtr *head_symbol, ExternPtr *head_extern, Instr
 DataPtr *head_data, int *dc, int *ic, int *errors_in_file)
 {
     char command_line[MAX_LINE];
+    int corrent_line = 1;
     while(fgets(command_line, MAX_LINE, ifp) != NULL) {
         parse_line_first_pass(command_line, errors_in_file, head_symbol, head_extern, head_instruction,
-        head_data, dc, ic);
+        head_data, dc, ic, corrent_line);
+        corrent_line++;
     }
     update_data_memory_in_symbol_table(*head_symbol, *ic);
     update_data_memory_in_data_table(*head_data, *ic);
@@ -61,9 +63,11 @@ void second_pass(FILE *ifp, SymbolPtr *head_symbol, ExternPtr *head_extern, Inst
 DataPtr *head_data, int *ic, int *errors_in_file)
 {
     char command_line[MAX_LINE];
+    int corrent_line = 1;
     while(fgets(command_line, MAX_LINE, ifp) != NULL) {
         parse_line_second_pass(command_line, errors_in_file, head_symbol, head_extern, head_instruction,
-        head_data, ic);
+        head_data, ic, corrent_line);
+        corrent_line++;
     }
 }
 

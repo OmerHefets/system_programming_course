@@ -138,19 +138,19 @@ int check_one_operand_in_instruction(char *line, char *command);
 int check_two_operands_in_instruction(char *line, char *command);
 
 /* parsing */
-int analyze_first_buffer(char *token, char *label, int *error_in_file);
+int analyze_first_buffer(char *token, char *label, int *error_in_file, int corrent_line);
 void parse_line_first_pass(char *line, int *error_in_file, SymbolPtr *symbol_head, ExternPtr *extern_head,
-InstructionPtr *instruction_head, DataPtr *data_head, int *dc, int *ic);
+InstructionPtr *instruction_head, DataPtr *data_head, int *dc, int *ic, int corrent_line);
 void parse_string_or_data_line(char *label, char *command, int label_flag, SymbolPtr *symbol_head,
-DataPtr *data_head, int* error_in_file, int *dc, char *line, int index_of_arguments);
-void parse_data_line(char *line, int index_of_arguments, DataPtr *data_head, int* error_in_file, int *dc);
-void parse_string_line(char line[], int index_of_arguments, DataPtr *data_head, int* error_in_file, int *dc);
+DataPtr *data_head, int* error_in_file, int *dc, char *line, int index_of_arguments, int corrent_line);
+void parse_data_line(char *line, int index_of_arguments, DataPtr *data_head, int* error_in_file, int *dc, int corrent_line);
+void parse_string_line(char line[], int index_of_arguments, DataPtr *data_head, int* error_in_file, int *dc, int corrent_line);
 void parse_entry_or_extern_line(char *command, ExternPtr *extern_head, SymbolPtr *symbol_head, int* error_in_file,
-char *line, int index_of_arguments);
+char *line, int index_of_arguments, int corrent_line);
 void parse_extern_line(char *line, int index_of_arguments, ExternPtr *extern_head, SymbolPtr *symbol_head,
-int *error_in_file);
+int *error_in_file, int corrent_line);
 void parse_operation_line(char *label, char *command, int label_flag, SymbolPtr *symbol_head,
-InstructionPtr *instruction_head, int* error_in_file, int *ic, char *line, int index_of_arguments);
+InstructionPtr *instruction_head, int* error_in_file, int *ic, char *line, int index_of_arguments, int corrent_line);
 int is_legal_filename_length(char *file_name);
 int add_suffix_to_file(char *file_name, char *file_name_with_suffix);
 
@@ -196,14 +196,14 @@ void create_extern_file(ExternPtr head_extern, SymbolPtr head_symbol);
 
 /* second pass */
 void parse_line_second_pass(char *line, int *error_in_file, SymbolPtr *symbol_head, ExternPtr *extern_head,
-InstructionPtr *instruction_head, DataPtr *data_head, int *ic);
+InstructionPtr *instruction_head, DataPtr *data_head, int *ic, int corrent_line);
 int analyze_first_buffer_second_pass(char *token);
-void parse_entry_line_second_pass(SymbolPtr head_symbol, int *error_in_file, char *line, int index_of_arguments);
+void parse_entry_line_second_pass(SymbolPtr head_symbol, int *error_in_file, char *line, int index_of_arguments, int corrent_line);
 void compile_instruction_line_second_pass(char *args_line, char *command, SymbolPtr symbol_head,
-InstructionPtr instruction_head, ExternPtr *extern_head, int *error_in_file, int *ic);
+InstructionPtr instruction_head, ExternPtr *extern_head, int *error_in_file, int *ic, int corrent_line);
 void instruction_line_one_operand_second_pass(char *args_line, char *command, SymbolPtr symbol_head, InstructionPtr instruction_head,
-ExternPtr *extern_head, int *error_in_file ,int *ic);
+ExternPtr *extern_head, int *error_in_file ,int *ic, int corrent_line);
 void instruction_line_two_operands_second_pass(char *args_line, char *command, SymbolPtr symbol_head, InstructionPtr instruction_head,
-ExternPtr *extern_head ,int *error_in_file, int *ic);
+ExternPtr *extern_head ,int *error_in_file, int *ic, int corrent_line);
 void compile_operand_second_pass(char *operand, InstructionPtr instruction_head, SymbolPtr symbol_head,
-ExternPtr *extern_head, int *error_in_file, int *ic);
+ExternPtr *extern_head, int *error_in_file, int *ic, int corrent_line);
