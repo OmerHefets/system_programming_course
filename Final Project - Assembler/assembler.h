@@ -7,7 +7,8 @@
 #define FALSE 0
 #define MAX_LABEL_SIZE 33 /* max size of label is 31, and added ':' and '/0' at the end of the label */
 #define MAX_LINE 81 /* maxline is 80 + 1 char for a newline */
-#define MAX_FILE_NAME 30
+#define MAX_FILE_NAME 30 /* 30 chars for the file name */
+#define MAX_FILE_NAME_WITH_SUFFIX 34 /* 30 chars for the file name and 4 chars for the suffix + '\0' */
 #define LABEL 1
 #define COMMAND 2
 #define EMPTY_OR_COMMENT 0
@@ -150,6 +151,8 @@ void parse_extern_line(char *line, int index_of_arguments, ExternPtr *extern_hea
 int *error_in_file);
 void parse_operation_line(char *label, char *command, int label_flag, SymbolPtr *symbol_head,
 InstructionPtr *instruction_head, int* error_in_file, int *ic, char *line, int index_of_arguments);
+int is_legal_filename_length(char *file_name);
+int add_suffix_to_file(char *file_name, char *file_name_with_suffix);
 
 
 /* helper functions? */

@@ -247,3 +247,22 @@ int is_legal_operand_type(int *optional_operands, int operand_type)
     }
     return FALSE;
 }
+
+int is_legal_filename_length(char *file_name)
+{
+    if(strlen(file_name) > MAX_FILE_NAME) {
+        return FALSE;
+    }
+    return TRUE;
+}
+
+int add_suffix_to_file(char *file_name, char *file_name_with_suffix)
+{
+    if(is_legal_filename_length(file_name)) {
+        strncpy(file_name_with_suffix, file_name, strlen(file_name));
+        strncat(file_name_with_suffix, ".as", 3);
+        return TRUE;
+    } else {
+        return FALSE;
+    }
+}

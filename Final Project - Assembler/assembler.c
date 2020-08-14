@@ -4,18 +4,21 @@ void compile_multiple_files(int argc, char *argv[])
 {
     FILE *ifp;
     char *prog_name = argv[0];
+    char file_name[MAX_FILE_NAME_WITH_SUFFIX];
     if (argc == 1) {
         fprintf(stdout, "The assembler didn't get any files.\n");
     }
     while (--argc > 0) {
-        /* ADD SUFFIX FUNC */
-        if ((ifp = fopen(*++argv, "r")) == NULL) {
+        if(!add_suffix_to_file(*++argv, file_name)) {
+            fprintf(stdout, "%s: can't open %s because file name is too long", prog_name, argv[0]);
+        }
+        else if ((ifp = fopen(file_name, "r")) == NULL) {
             fprintf(stdout, "%s: can't open %s for reading\n", prog_name, argv[0]);
-            exit(1);
         } else {
             compile_file(ifp);
             fclose(ifp);
         }
+        memset(file_name, 0, strlen(file_name));
     }
 }
 
@@ -26,7 +29,7 @@ void compile_file(FILE *ifp)
     ExternPtr head_extern = NULL;
     InstructionPtr head_instruction = NULL;
     DataPtr head_data = NULL;
-    int *dc, *ic, *errors_in_file, dcf = 0, icf = 100, error = FALSE, pos;
+    int *dc, *ic, *errors_in_file, dcf = 0, icf = 100, error = FALSE, pos, corrent_line = 1;
     dc = &dcf, ic = &icf, errors_in_file = &error;
     pos = ftell(ifp);
     first_pass(ifp, &head_symbol, &head_extern, &head_instruction, &head_data, dc, ic, errors_in_file);
