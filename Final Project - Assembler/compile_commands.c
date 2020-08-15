@@ -1,43 +1,54 @@
+/**
+ * This modules has all functions for compiling an instruction line in the first pass only, and all functions for coding the instruction line to binary machine code.
+ * the coding is done with masking the correct value of the specific bits of each part of the word: ARE, funct, registers and addressing method, opcode.
+ */
+
 #include "assembler.h"
 
+/* get an instruction line and compile it according to the number of operands it has */
 void compile_instruction_line(char *args_line, char *command, SymbolPtr *symbol_head, InstructionPtr *instruction_head, int *ic)
 {
+    /* we already checked that the line is correct in the pass, so we assume that the number of arguments are correct */
     int num_of_operands = opcodes_number_of_operands[get_command_index(command)];
-    if (num_of_operands == 0) {
+    if (num_of_operands == 0) { /* using numbers and not defined values because it is more readable like that */
         compile_instruction_line_zero_operands(command, symbol_head, instruction_head, ic);
     } else if (num_of_operands == 1) {
         compile_instruction_line_one_operand(args_line, command, symbol_head, instruction_head, ic);
-    } else {
+    } else { /* there are 2 operands */
         compile_instruction_line_two_operands(args_line, command, symbol_head, instruction_head, ic);
     }
 }
 
+/* create machine code for line with with no operands */
 void compile_instruction_line_zero_operands(char *command, SymbolPtr *symbol_head, InstructionPtr *instruction_head, int *ic)
 {
     unsigned long int command_value = RESET_COMMAND_VALUE;
-    code_are(&command_value, 'A');
-    code_opcode(&command_value, command);
-    add_instruction(instruction_head, *ic, command_value);
-    (*ic)++;
+    code_are(&command_value, 'A'); /* code the A bit in the word */
+    code_opcode(&command_value, command); /* code the opcode of the command */
+    add_instruction(instruction_head, *ic, command_value); /* add the instruction with the command value to the instruction binary code list */
+    (*ic)++; /* increase number of instruction lines by 1*/
 }
 
+/* create machine code for line with one operand */
 void compile_instruction_line_one_operand(char *args_line, char *command, SymbolPtr *symbol_head, InstructionPtr *instruction_head,
 int *ic)
 {
     char *delim = " \t\n";
     char *token;
     unsigned long int command_value = RESET_COMMAND_VALUE;
-    token = strtok(args_line, delim);
+    token = strtok(args_line, delim); /* get operand name */
+    /* code all the required fields in the word */
     code_are(&command_value, 'A');
     code_opcode(&command_value, command);
     code_funct(&command_value, command);
     code_addressing_and_register(&command_value, token, DEST);
+    /* add the instruction */
     add_instruction(instruction_head, *ic, command_value);
     (*ic)++;
     compile_operand(token, instruction_head, ic);
 }
 
-
+/* create machine code for line with two operands */
 void compile_instruction_line_two_operands(char *args_line, char *command, SymbolPtr *symbol_head, InstructionPtr *instruction_head,
 int *ic)
 {
@@ -60,13 +71,14 @@ int *ic)
     compile_operand(two_tokens[1], instruction_head, ic);
 }
 
-
+/* create machine code for an operand in the first pass, if possible */
 void compile_operand(char *operand, InstructionPtr *instruction_head, int *ic)
 {
     unsigned long int command_value = RESET_COMMAND_VALUE;
     unsigned long int operand_value;
     int operand_type = get_operand_type(operand);
-    if (operand_type == IMMEDIATE_ADDRESSING) {
+    /* create the machine code only if the addressing method is immediate addressing */
+    if (operand_type == IMMEDIATE_ADDRESSING) { 
         code_are(&command_value, 'A');
         operand_value = get_number_from_operand_adressing_zero(operand);
         command_value += (operand_value <<= SHIFT_BITS_FROM_A_R_E_CODING);
