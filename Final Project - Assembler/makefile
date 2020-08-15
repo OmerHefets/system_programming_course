@@ -1,9 +1,7 @@
-assembler: main.o data_structures_functions.o parsing_error_checking.o defined_data_structures.o \
+assembler: data_structures_functions.o parsing_error_checking.o defined_data_structures.o \
  parsing.o compile_commands.o assembler.o create_files.o second_pass.o assembler.h
-	gcc -g -Wall -ansi -pedantic main.o data_structures_functions.o parsing_error_checking.o \
+	gcc -g -Wall -ansi -pedantic data_structures_functions.o parsing_error_checking.o \
 	defined_data_structures.o parsing.o compile_commands.o assembler.o create_files.o second_pass.o assembler.h -o assembler
-main.o: main.c assembler.h
-	gcc -c -Wall -ansi -pedantic main.c -o main.o
 data_structures_functions.o: data_structures_functions.c assembler.h
 	gcc -c -Wall -ansi -pedantic data_structures_functions.c -o data_structures_functions.o
 parsing_error_checking.o: parsing_error_checking.c assembler.h

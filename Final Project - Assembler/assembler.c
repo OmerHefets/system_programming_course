@@ -1,5 +1,11 @@
 #include "assembler.h"
 
+int main(int argc, char *argv[])
+{
+    compile_multiple_files(argc, argv);
+    return 0;
+}
+
 void compile_multiple_files(int argc, char *argv[])
 {
     FILE *ifp1, *ifp2;
@@ -31,31 +37,26 @@ void compile_file(FILE *ifp, FILE *ifp2, char *file_name)
     DataPtr head_data = NULL;
     int *dc, *ic, *errors_in_file, dcf = 0, icf = 100, error = FALSE;
     dc = &dcf, ic = &icf, errors_in_file = &error;
-    first_pass(ifp, &head_symbol, &head_extern, &head_instruction, &head_data, dc, ic, errors_in_file);
+    first_pass(ifp, &head_symbol, &head_extern, &head_instruction, &head_data, dc, ic, errors_in_file, file_name);
 
     if (*errors_in_file == FALSE) {
         *ic = 100;
-        second_pass(ifp2, &head_symbol, &head_extern, &head_instruction, &head_data, ic, errors_in_file);
+        second_pass(ifp2, &head_symbol, &head_extern, &head_instruction, &head_data, ic, errors_in_file, file_name);
     }
     if (*errors_in_file == FALSE) {
         create_files(head_symbol, head_extern, head_instruction, head_data, *ic, *dc, file_name);
     }
-    /*print_symbol_list(head_symbol);*/
-    /*print_extern_list(head_extern);*/
     free_all_data_structures(&head_symbol, &head_extern, &head_instruction, &head_data);
-    if (head_symbol != NULL || head_extern != NULL || head_instruction != NULL || head_data != NULL) {
-        printf("shit!!!!!!!!!!!!!!!!!!!!");
-    }
 }
 
 void first_pass(FILE *ifp, SymbolPtr *head_symbol, ExternPtr *head_extern, InstructionPtr *head_instruction,
-DataPtr *head_data, int *dc, int *ic, int *errors_in_file)
+DataPtr *head_data, int *dc, int *ic, int *errors_in_file, char *file_name)
 {
     char command_line[MAX_LINE];
     int corrent_line = 1;
     while(fgets(command_line, MAX_LINE, ifp) != NULL) {
         parse_line_first_pass(command_line, errors_in_file, head_symbol, head_extern, head_instruction,
-        head_data, dc, ic, corrent_line);
+        head_data, dc, ic, corrent_line, file_name);
         corrent_line++;
     }
     update_data_memory_in_symbol_table(*head_symbol, *ic);
@@ -63,13 +64,13 @@ DataPtr *head_data, int *dc, int *ic, int *errors_in_file)
 }
 
 void second_pass(FILE *ifp, SymbolPtr *head_symbol, ExternPtr *head_extern, InstructionPtr *head_instruction,
-DataPtr *head_data, int *ic, int *errors_in_file)
+DataPtr *head_data, int *ic, int *errors_in_file, char *file_name)
 {
     char command_line[MAX_LINE];
     int corrent_line = 1;
     while(fgets(command_line, MAX_LINE, ifp) != NULL) {
         parse_line_second_pass(command_line, errors_in_file, head_symbol, head_extern, head_instruction,
-        head_data, ic, corrent_line);
+        head_data, ic, corrent_line, file_name);
         corrent_line++;
     }
 }
