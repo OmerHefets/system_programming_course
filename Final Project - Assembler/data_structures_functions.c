@@ -94,7 +94,7 @@ unsigned char code_or_data, unsigned char external, unsigned char entry)
     symbol_ptr->external = external;
     symbol_ptr->entry = entry;
     symbol_ptr->next = NULL;
-    memset(symbol_ptr->label, 0, strlen(symbol_ptr->label));
+    memset(symbol_ptr->label, UNDEFINED, strlen(symbol_ptr->label));
     strncpy(symbol_ptr->label, label, label_length);
 
     if (temp == NULL) {
@@ -113,7 +113,7 @@ void add_extern(ExternPtr *head_extern_list, char *label, int label_length, unsi
     ExternPtr temp = *head_extern_list;
     extern_ptr->memory = memory;
     extern_ptr->next = NULL;
-    memset(extern_ptr->label, 0, strlen(extern_ptr->label));
+    memset(extern_ptr->label, UNDEFINED, strlen(extern_ptr->label));
     strncpy(extern_ptr->label, label, label_length);
 
     if (temp == NULL) {
@@ -348,7 +348,7 @@ void print_instructions_to_file(FILE *ofp, InstructionPtr head_instruction)
     char buffer[MAX_LINE];
     InstructionPtr temp = head_instruction;
     while(temp != NULL) {
-        sprintf(buffer, "%07lu %06lx\n", temp->memory, (temp->command & 0xFFFFFFUL));
+        sprintf(buffer, "%07lu %06lx\n", temp->memory, (temp->command & MASK_24_BITS));
         fputs(buffer, ofp);
         temp = temp->next;
     }
@@ -359,7 +359,7 @@ void print_data_to_file(FILE *ofp, DataPtr head_data)
     char buffer[MAX_LINE];
     DataPtr temp = head_data;
     while(temp != NULL) {
-        sprintf(buffer, "%07lu %06lx\n", temp->memory, (temp->data & 0xFFFFFFUL));
+        sprintf(buffer, "%07lu %06lx\n", temp->memory, (temp->data & MASK_24_BITS));
         fputs(buffer, ofp);
         temp = temp->next;
     }

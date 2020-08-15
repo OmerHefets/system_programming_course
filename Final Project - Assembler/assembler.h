@@ -3,6 +3,7 @@
 #include <string.h>
 #include <ctype.h>
 
+#define EXIT_WITH_SUCESS 0 /* usage for main function - return 0 if the program was successful*/
 #define TRUE 1
 #define FALSE 0
 #define MAX_LABEL_SIZE 33 /* max size of label is 31, and added ':' and '/0' at the end of the label */
@@ -21,10 +22,41 @@
 #define DEST 0
 #define ENTRY 1
 #define EXTERN 0
+#define AS_AND_OB_SUFFIX_LENGTH 3
+#define ENT_AND_EXT_SUFFIX_LENGTH 4
 #define FILENAME_SUFFIX 0
-#define OBJECT_OUTPUT 1
-#define ENTRY_OUTPUT 2
-#define EXTERN_OUTPUT 3
+#define OBJECT_SUFFIX 1
+#define ENTRY_SUFFIX 2
+#define EXTERN_SUFFIX 3
+#define DATA_MEMORY_START 0
+#define INSTRUCTION_MEMORY_START 100
+#define FIRST_LINE 1
+#define NO_ARGUMENTS 0
+#define ONLY_COMMAND_NO_FILES 1
+#define RESET_COMMAND_VALUE 0
+#define RESET_DATA_VALUE 0
+#define IMMEDIATE_ADDRESSING 0
+#define DIRECT_ADDRESSING 1
+#define RELATIVE_ADDRESSING 2
+#define REGISTER_ADDRESSING 3
+#define SHIFT_BITS_FROM_A_R_E_CODING 3
+#define SHIFT_BITS_TO_FUNCT 3
+#define SHIFT_BITS_TO_OPCODE 18
+#define SHIFT_BITS_TO_SRC 13
+#define SHIFT_BITS_TO_DEST 8
+#define DIRECT_OPERAND_BITS 8
+#define RELATIVE_OPERAND_BITS 16
+#define REGISTER_OPERAND_BITS 24
+#define NUM_OF_REGISTERS 8
+#define NUM_OF_DATA_OPERATIONS 4
+#define NUM_OF_OPCODES 16
+#define MAX_POSSIBLE_OPCODES 3
+#define A_BIT 4
+#define R_BIT 2
+#define E_BIT 1
+#define MASK_24_BITS 0xFFFFFFUL
+#define FIRST_OPERAND 0
+#define SECOND_OPERAND 1
 
 extern char *registers[];
 extern char *opcodes[];
@@ -186,7 +218,7 @@ void code_addressing_and_register(unsigned long int *command, char *operand, int
 
 /* assembler */
 void compile_multiple_files(int argc, char *argv[]);
-void compile_file(FILE *ifp, FILE *ifp2, char *file_name);
+void compile_file(FILE *ifp_first_pass, FILE *ifp_second_pass, char *file_name);
 void first_pass(FILE *ifp, SymbolPtr *head_symbol, ExternPtr *head_extern, InstructionPtr *head_instruction,
 DataPtr *head_data, int *dc, int *ic, int *errors_in_file, char *file_name);
 void second_pass(FILE *ifp, SymbolPtr *head_symbol, ExternPtr *head_extern, InstructionPtr *head_instruction,

@@ -99,28 +99,27 @@ ExternPtr *extern_head ,int *error_in_file, int *ic, int corrent_line, char *fil
     char *token;
     char two_tokens[2][MAX_LABEL_SIZE] = {"", ""};
     token = strtok(args_line, delim);
-    strncat(two_tokens[0], token, 20);
+    strncat(two_tokens[FIRST_OPERAND], token, MAX_LABEL_SIZE);
     token = strtok(NULL, delim);
-    strncat(two_tokens[1], token, 20);
-    compile_operand_second_pass(two_tokens[0], instruction_head, symbol_head, extern_head, error_in_file, ic, 
+    strncat(two_tokens[SECOND_OPERAND], token, MAX_LABEL_SIZE);
+    compile_operand_second_pass(two_tokens[FIRST_OPERAND], instruction_head, symbol_head, extern_head, error_in_file, ic, 
     corrent_line, file_name);
-    compile_operand_second_pass(two_tokens[1], instruction_head, symbol_head, extern_head, error_in_file, ic, 
+    compile_operand_second_pass(two_tokens[SECOND_OPERAND], instruction_head, symbol_head, extern_head, error_in_file, ic, 
     corrent_line, file_name);
 }
 
 void compile_operand_second_pass(char *operand, InstructionPtr instruction_head, SymbolPtr symbol_head,
 ExternPtr *extern_head, int *error_in_file, int *ic, int corrent_line, char *file_name)
 {
-    unsigned long int command_value = 0;
+    unsigned long int command_value = RESET_COMMAND_VALUE;
     int operand_type = get_operand_type(operand);
-    /*printf("%s\n", operand);*/
-    if (operand_type == 1) {
+    if (operand_type == DIRECT_ADDRESSING) {
         if (check_label_duplication_in_symbols(operand, symbol_head) == FALSE) {
             *error_in_file = TRUE;
             fprintf(stdout, "Line %d in file %s: Label doesn\'t exists.\n", corrent_line, file_name);
         } else {
             command_value = get_symbol_memory(get_symbol_by_label(symbol_head, operand));
-            command_value <<= 3;
+            command_value <<= SHIFT_BITS_FROM_A_R_E_CODING;
             if (get_symbol_external(get_symbol_by_label(symbol_head, operand))) {
                 code_are(&command_value, 'E');
             } else {
@@ -131,13 +130,13 @@ ExternPtr *extern_head, int *error_in_file, int *ic, int corrent_line, char *fil
                 add_extern(extern_head, operand, strlen(operand), *ic);
             }
         }
-    } else if (operand_type == 2) {
+    } else if (operand_type == RELATIVE_ADDRESSING) {
         if (check_label_duplication_in_symbols(operand+1, symbol_head) == FALSE) {
             *error_in_file = TRUE;
             fprintf(stdout, "Line %d in file %s: Label doesn\'t exists.\n", corrent_line, file_name);
         } else {
             command_value = (get_symbol_memory(get_symbol_by_label(symbol_head, operand+1)) - *ic + 1);
-            command_value <<= 3;
+            command_value <<= SHIFT_BITS_FROM_A_R_E_CODING;
             code_are(&command_value, 'A');
             if (get_symbol_external(get_symbol_by_label(symbol_head, operand+1)) == TRUE) {
                 *error_in_file = TRUE;
@@ -148,7 +147,7 @@ ExternPtr *extern_head, int *error_in_file, int *ic, int corrent_line, char *fil
             }
         }
     }
-    if (operand_type != 3) {
+    if (operand_type != REGISTER_ADDRESSING) {
         (*ic)++;
     }
 }

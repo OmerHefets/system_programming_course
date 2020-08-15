@@ -6,12 +6,12 @@ int check_command_exists(char *str)
     if (str == NULL) {
         return exists;
     }
-    for (i=0 ; i < 16 ; i++) {
+    for (i=0 ; i < NUM_OF_OPCODES ; i++) {
         if (!strcmp(opcodes[i], str)) {
             exists = TRUE;
         }
     }
-    for (i=0 ; i < 4 ; i++) {
+    for (i=0 ; i < NUM_OF_DATA_OPERATIONS ; i++) {
         if (!strcmp(data_operations[i], str)) {
             exists = TRUE;
         }
@@ -26,7 +26,7 @@ int check_correct_register(char *str)
         return FALSE;
     }
     buffer_size = strlen(str);
-    for (i=0 ; i < 8 ; i++) {
+    for (i=0 ; i < NUM_OF_REGISTERS ; i++) {
         if (!strncmp(str, registers[i], buffer_size)) {
             return TRUE;
         }
@@ -43,7 +43,7 @@ int check_correct_label(char *str)
         return FALSE;
     }
     buffer_size = strlen(str);
-    if (buffer_size > 32 || !isalpha(str[0]) || str[buffer_size-1] != ':') {
+    if (buffer_size >= MAX_LABEL_SIZE || !isalpha(str[0]) || str[buffer_size-1] != ':') {
         return FALSE;
     }
 
@@ -55,15 +55,15 @@ int check_correct_label(char *str)
         i++;
     }
 
-    for (i=0 ; i < 16 ; i++) {
+    for (i=0 ; i < NUM_OF_OPCODES ; i++) {
         if (!strncmp(str, opcodes[i], buffer_size-1)) {
             return FALSE;
         }
-        if (i < 8) {
+        if (i < NUM_OF_REGISTERS) {
             if (!strncmp(str, registers[i], buffer_size-1)) {
             return FALSE;
             }
-            if (i < 4) {
+            if (i < NUM_OF_DATA_OPERATIONS) {
                 if (!strncmp(str, data_operations[i], buffer_size-1)) {
                     return FALSE;
                 }
@@ -228,4 +228,23 @@ int check_two_operands_in_instruction(char *line, char *command)
         }
     }
     return FALSE;
+}
+
+int is_legal_operand_type(int *optional_operands, int operand_type)
+{
+    int i;
+    for (i=0 ; i < MAX_POSSIBLE_OPCODES ; i++) {
+        if (optional_operands[i] == operand_type) {
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
+int is_legal_filename_length(char *file_name)
+{
+    if(strlen(file_name) > MAX_FILE_NAME) {
+        return FALSE;
+    }
+    return TRUE;
 }
