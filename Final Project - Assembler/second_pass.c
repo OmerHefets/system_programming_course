@@ -57,6 +57,9 @@ void parse_entry_line_second_pass(SymbolPtr head_symbol, int *error_in_file, cha
             *error_in_file = TRUE;
             fprintf(stdout, "Line %d in file: The label of entry doesn\'t exist in the file.\n", corrent_line);
         }
+    } else {
+        *error_in_file = TRUE;
+        fprintf(stdout, "Line %d in file: Invalid argument name for entry.\n", corrent_line);
     }
 }
 
