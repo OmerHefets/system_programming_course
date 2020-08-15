@@ -75,10 +75,10 @@ ExternPtr extern_alloc(void);
 InstructionPtr instruction_alloc(void);
 DataPtr data_alloc(void);
 
-void free_symbol_list(SymbolPtr head);
-void free_extern_list(ExternPtr head);
-void free_instruction_list(InstructionPtr head);
-void free_data_list(DataPtr head);
+void free_symbol_list(SymbolPtr *head);
+void free_extern_list(ExternPtr *head);
+void free_instruction_list(InstructionPtr *head);
+void free_data_list(DataPtr *head);
 
 void add_symbol(SymbolPtr *head_symbol_list, char *label, int label_length, unsigned long int memory,
 unsigned char code_or_data, unsigned char external, unsigned char entry);
@@ -126,6 +126,8 @@ void update_data_memory_in_data_table(DataPtr head_data_list, int ic);
 void print_instructions_to_file(FILE *ofp, InstructionPtr head_instruction);
 void print_data_to_file(FILE *ofp, DataPtr head_data);
 int search_entry_or_extern_symbol(SymbolPtr head_symbol, int entry_or_extern);
+void print_symbol_list(SymbolPtr head);
+void print_extern_list(ExternPtr head);
 
 
 /* parsing error checking */
@@ -182,13 +184,13 @@ void code_addressing_and_register(unsigned long int *command, char *operand, int
 
 /* assembler */
 void compile_multiple_files(int argc, char *argv[]);
-void compile_file(FILE *ifp, char *file_name);
+void compile_file(FILE *ifp, FILE *ifp2, char *file_name);
 void first_pass(FILE *ifp, SymbolPtr *head_symbol, ExternPtr *head_extern, InstructionPtr *head_instruction,
 DataPtr *head_data, int *dc, int *ic, int *errors_in_file);
 void second_pass(FILE *ifp, SymbolPtr *head_symbol, ExternPtr *head_extern, InstructionPtr *head_instruction,
 DataPtr *head_data, int *ic, int *errors_in_file);
-void free_all_data_structures(SymbolPtr head_symbol, ExternPtr head_extern, InstructionPtr head_instruction,
-DataPtr head_data);
+void free_all_data_structures(SymbolPtr *head_symbol, ExternPtr *head_extern, InstructionPtr *head_instruction,
+DataPtr *head_data);
 
 
 /* creating files */

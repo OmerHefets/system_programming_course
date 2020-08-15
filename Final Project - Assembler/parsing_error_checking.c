@@ -127,7 +127,7 @@ int check_string_argument(char *line)
 int check_extern_argument(char *line)
 {
     char *delim = " \t\n";
-    char *token, temp_token[MAX_LABEL_SIZE];
+    char *token, temp_token[MAX_LABEL_SIZE] = "";
     token = strtok(line, delim);
     if (token == NULL) {
         return FALSE;

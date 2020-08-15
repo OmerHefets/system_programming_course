@@ -118,10 +118,10 @@ void test_parse_line_first_pass_instructions()
     printf("ic: %d\n", *ic);
     printf("dc: %d\n", *dc);
     printf("%lu\n", get_data_data(get_data_by_memory(head_data, 4)));
-    free_symbol_list(head_symbol);
-    free_extern_list(head_extern);
-    free_instruction_list(head_instruction);
-    free_data_list(head_data);
+    free_symbol_list(&head_symbol);
+    free_extern_list(&head_extern);
+    free_instruction_list(&head_instruction);
+    free_data_list(&head_data);
 }
 
 void test_parse_line_first_pass()
@@ -140,10 +140,10 @@ void test_parse_line_first_pass()
     printf("%s\n", get_symbol_label(head_symbol));
     printf("%d\n", *dc);
     /*printf("%lu\n", get_data_data(head_data->next->next));*/
-    free_symbol_list(head_symbol);
-    free_extern_list(head_extern);
-    free_instruction_list(head_instruction);
-    free_data_list(head_data);
+    free_symbol_list(&head_symbol);
+    free_extern_list(&head_extern);
+    free_instruction_list(&head_instruction);
+    free_data_list(&head_data);
 }
 
 void test_check_number_of_commas()

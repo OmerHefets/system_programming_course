@@ -12,7 +12,7 @@ void create_entry_file(SymbolPtr head_symbol, char *file_name)
 {
     FILE *ofp;
     SymbolPtr temp = head_symbol;
-    char buffer[MAX_LINE], file_name_with_suffix[MAX_FILE_NAME_WITH_SUFFIX] = "";
+    char buffer[MAX_LINE] = "", file_name_with_suffix[MAX_FILE_NAME_WITH_SUFFIX] = "";
     add_suffix_to_file(file_name, file_name_with_suffix, ENTRY_OUTPUT);
     if (search_entry_or_extern_symbol(head_symbol, ENTRY)) {
         if ((ofp = fopen(file_name_with_suffix, "w")) == NULL) {
@@ -34,9 +34,9 @@ void create_extern_file(ExternPtr head_extern, SymbolPtr head_symbol, char *file
 {
     FILE *ofp;
     ExternPtr temp = head_extern;
-    char buffer[MAX_LINE], file_name_with_suffix[MAX_FILE_NAME_WITH_SUFFIX] = "";
+    char buffer[MAX_LINE] = "", file_name_with_suffix[MAX_FILE_NAME_WITH_SUFFIX] = "";
     add_suffix_to_file(file_name, file_name_with_suffix, EXTERN_OUTPUT);
-    /* as requested, we create a file */
+    /* as requested, we create a file.... */
     if (search_entry_or_extern_symbol(head_symbol, EXTERN)) {
         if ((ofp = fopen(file_name_with_suffix, "w")) == NULL) {
             fprintf(stdout, "can\'t open a file for reading.\n");
@@ -54,7 +54,7 @@ void create_extern_file(ExternPtr head_extern, SymbolPtr head_symbol, char *file
 void create_object_file(InstructionPtr head_instruction, DataPtr head_data, int ic, int dc, char *file_name)
 {
     FILE *ofp;
-    char buffer[MAX_LINE], file_name_with_suffix[MAX_FILE_NAME_WITH_SUFFIX] = "";
+    char buffer[MAX_LINE] = "", file_name_with_suffix[MAX_FILE_NAME_WITH_SUFFIX] = "";
     add_suffix_to_file(file_name, file_name_with_suffix, OBJECT_OUTPUT);
     if ((ofp = fopen(file_name_with_suffix, "w")) == NULL) {
             fprintf(stdout, "can\'t open a file for reading.\n");

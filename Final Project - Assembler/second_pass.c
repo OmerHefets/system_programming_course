@@ -104,7 +104,7 @@ ExternPtr *extern_head, int *error_in_file, int *ic, int corrent_line)
 {
     unsigned long int command_value = 0;
     int operand_type = get_operand_type(operand);
-    printf("%s\n", operand);
+    /*printf("%s\n", operand);*/
     if (operand_type == 1) {
         if (check_label_duplication_in_symbols(operand, symbol_head) == FALSE) {
             *error_in_file = TRUE;

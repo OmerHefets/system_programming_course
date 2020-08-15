@@ -40,46 +40,46 @@ DataPtr data_alloc(void)
     return ptr;
 }
 
-void free_symbol_list(SymbolPtr head)
+void free_symbol_list(SymbolPtr *head)
 {
     SymbolPtr temp;
 
-    while (head != NULL) {
-        temp = head;
-        head = head->next;
+    while (*head != NULL) {
+        temp = *head;
+        *head = (*head)->next;
         free(temp);
     }
 }
 
-void free_extern_list(ExternPtr head)
+void free_extern_list(ExternPtr *head)
 {
     ExternPtr temp;
 
-    while (head != NULL) {
-        temp = head;
-        head = head->next;
+    while (*head != NULL) {
+        temp = *head;
+        *head = (*head)->next;
         free(temp);
     }
 }
 
-void free_instruction_list(InstructionPtr head)
+void free_instruction_list(InstructionPtr *head)
 {
     InstructionPtr temp;
 
-    while (head != NULL) {
-        temp = head;
-        head = head->next;
+    while (*head != NULL) {
+        temp = *head;
+        *head = (*head)->next;
         free(temp);
     }
 }
 
-void free_data_list(DataPtr head)
+void free_data_list(DataPtr *head)
 {
     DataPtr temp;
 
-    while (head != NULL) {
-        temp = head;
-        head = head->next;
+    while (*head != NULL) {
+        temp = *head;
+        *head = (*head)->next;
         free(temp);
     }
 }
@@ -94,7 +94,8 @@ unsigned char code_or_data, unsigned char external, unsigned char entry)
     symbol_ptr->external = external;
     symbol_ptr->entry = entry;
     symbol_ptr->next = NULL;
-    strncat(symbol_ptr->label, label, label_length);
+    memset(symbol_ptr->label, 0, strlen(symbol_ptr->label));
+    strncpy(symbol_ptr->label, label, label_length);
 
     if (temp == NULL) {
         *head_symbol_list = symbol_ptr;
@@ -112,7 +113,8 @@ void add_extern(ExternPtr *head_extern_list, char *label, int label_length, unsi
     ExternPtr temp = *head_extern_list;
     extern_ptr->memory = memory;
     extern_ptr->next = NULL;
-    strncat(extern_ptr->label, label, label_length);
+    memset(extern_ptr->label, 0, strlen(extern_ptr->label));
+    strncpy(extern_ptr->label, label, label_length);
 
     if (temp == NULL) {
         *head_extern_list = extern_ptr;
@@ -379,4 +381,27 @@ int search_entry_or_extern_symbol(SymbolPtr head_symbol, int entry_or_extern)
         temp = temp->next;
     }
     return FALSE;
+}
+
+void print_symbol_list(SymbolPtr head)
+{
+    SymbolPtr temp = head;
+    while (temp != NULL) {
+        printf("name of label is: %s\n", temp->label);
+        printf("memory value is: %lu\n", temp->memory);
+        printf("code or data is: %d\n", temp->code_or_data);
+        printf("external is: %d\n", temp->external);
+        printf("entry is: %d\n", temp->entry);
+        temp = temp->next;
+    }
+}
+
+void print_extern_list(ExternPtr head)
+{
+    ExternPtr temp = head;
+    while (temp != NULL) {
+        printf("name of label is: %s\n", temp->label);
+        printf("length of label is: %lu\n", strlen(temp->label));
+        temp = temp->next;
+    }
 }
