@@ -151,64 +151,145 @@ DataPtr *head_data);
 
 
 
+
+/* declarations of functions in data_structures_functions.c */
+
+/* allocate a symbol struct */
 SymbolPtr symbol_alloc(void);
+
+/* allocate an extern struct */
 ExternPtr extern_alloc(void);
+
+/* allocate an instruction struct */
 InstructionPtr instruction_alloc(void);
+
+/* allocate a data struct */
 DataPtr data_alloc(void);
 
+/* free the symbol list */
 void free_symbol_list(SymbolPtr *head);
+
+/* free the extern list */
 void free_extern_list(ExternPtr *head);
+
+/* free the instruction list */
 void free_instruction_list(InstructionPtr *head);
+
+/* free the data list */
 void free_data_list(DataPtr *head);
 
+/* add a symbol to the symbol list (to the linked list) */
 void add_symbol(SymbolPtr *head_symbol_list, char *label, int label_length, unsigned long int memory,
 unsigned char code_or_data, unsigned char external, unsigned char entry);
+
+/* add an extern struct (with extern position in memory for the extern file */
 void add_extern(ExternPtr *head_extern_list, char *label, int label_length, unsigned long int memory);
+
+/* add an instruction to the linked list (with the machine code and memory) */
 void add_instruction(InstructionPtr *head_instruction_list, unsigned long int memory, unsigned long int command);
+
+/* add a data coded in the machine code to the data linked list */
 void add_data(DataPtr *head_data_list, unsigned long int memory, unsigned long int data);
 
+/* get symbol ptr by specific label */
 SymbolPtr get_symbol_by_label(SymbolPtr head_symbol_list, char *label);
+
+/* get extern ptr by label */
 ExternPtr get_extern_by_label(ExternPtr head_extern_list, char *label);
+
+/* get instruction ptr by memory */
 InstructionPtr get_instruction_by_memory(InstructionPtr head_instruction_list, unsigned long int memory);
+
+/* get data ptr by memory */
 DataPtr get_data_by_memory(DataPtr head_data_ptr, unsigned long int memory);
 
-
+/* get the label of a symbol */
 char *get_symbol_label(SymbolPtr ptr);
+
+/* get the memory of a symbol */
 unsigned long int get_symbol_memory(SymbolPtr ptr);
+
+/* get if the symbol is code or data */
 unsigned char get_symbol_code_or_data(SymbolPtr ptr);
+
+/* get if a symbol is an extern */
 unsigned char get_symbol_external(SymbolPtr ptr);
+
+/* get if a symbol is an entry */
 unsigned char get_symbol_entry(SymbolPtr ptr);
 
+/* get the label of an extern */
 char *get_extern_label(ExternPtr ptr);
+
+/* get the memory of an extern */
 unsigned long int get_extern_memory(ExternPtr ptr);
 
+/* get the memory of an instruction */
 unsigned long int get_instruction_memory(InstructionPtr ptr);
+
+/* get the command (machine code) of an instruction */
 unsigned long int get_instruction_command(InstructionPtr ptr);
 
+/* get the memory of data struct */
 unsigned long int get_data_memory(DataPtr ptr);
+
+/* get the data (machine code) of a data struct */
 unsigned long int get_data_data(DataPtr ptr);
 
+/* edit the memory of a symbol by ptr */
 void edit_symbol_memory(SymbolPtr ptr, unsigned long int new_memory);
+
+/* edit the value of code or data of a symbol by ptr */
 void edit_symbol_code_or_data(SymbolPtr ptr, unsigned char new_code_or_data);
+
+/* edit the extern value of a symbol */
 void edit_symbol_external(SymbolPtr ptr, unsigned char new_external);
+
+/* edit the entry value of a symbol */ 
 void edit_symbol_entry(SymbolPtr ptr, unsigned char new_entry);
 
+/* edit the memory of an extern by ptr */
 void edit_extern_memory(ExternPtr ptr, unsigned long int new_memory);
 
+/* edit the memory of an instruction by ptr */
 void edit_instruction_memory(InstructionPtr ptr, unsigned long int new_memory);
+
+/* edit the command (machine code) of an instruction */
 void edit_instruction_command(InstructionPtr ptr, unsigned long int new_command);
 
+/* edit the memory of a data struct */
 void edit_data_memory(DataPtr ptr, unsigned long int new_memory);
+
+/* edit the data (machine code) of a data struct */
 void edit_data_data(DataPtr ptr, unsigned long int new_data);
 
+/* check if a label already exists in the symbol table */
 int check_label_duplication_in_symbols(char *label, SymbolPtr head_symbol_list);
+
+/* update the data memory in the symbol table (done at the end of the first pass) */
 void update_data_memory_in_symbol_table(SymbolPtr head_symbol_list, int ic);
+
+/* update the data memory in the data table (at the end of the first pass) */
 void update_data_memory_in_data_table(DataPtr head_data_list, int ic);
+
+/* print all instructions from a linked list to a file */
 void print_instructions_to_file(FILE *ofp, InstructionPtr head_instruction);
+
+/* print all data from the linked list to a file */
 void print_data_to_file(FILE *ofp, DataPtr head_data);
+
+/* search if an entry or if an extern symbol exists in the symbol list - choose between EXTERN and ENTRY */
 int search_entry_or_extern_symbol(SymbolPtr head_symbol, int entry_or_extern);
+
+/* helper function that prints most important values of all symbols in the symbol list */
 void print_symbol_list(SymbolPtr head);
+
+/* helper function that prints most important values of all extern appearances */
 void print_extern_list(ExternPtr head);
+
+
+/* end of declarations of functions in data_structures_functions.c */
+
 
 
 /* parsing error checking */
@@ -241,7 +322,6 @@ int *error_in_file, int corrent_line, char *file_name);
 void parse_operation_line(char *label, char *command, int label_flag, SymbolPtr *symbol_head, InstructionPtr *instruction_head, 
 int* error_in_file, int *ic, char *line, int index_of_arguments, int corrent_line, char *file_name);
 int is_legal_filename_length(char *file_name);
-int add_suffix_to_file(char *file_name, char *file_name_with_suffix, int suffix);
 
 
 /* helper functions? */
@@ -252,26 +332,70 @@ long get_number_from_operand_adressing_zero(char *operand);
 int is_legal_operand_type(int *optional_operands, int operand_type);
 
 
-/* compiling instructions */
+
+
+/* declarations of functions in compile_commands.c */
+
+
+/* get an instruction line and compile it according to the number of operands it has */
 void compile_instruction_line(char *args_line, char *command, SymbolPtr *symbol_head, InstructionPtr *instruction_head, int *ic);
+
+/* create machine code for line with with no operands */
 void compile_instruction_line_zero_operands(char *command, SymbolPtr *symbol_head, InstructionPtr *instruction_head, int *ic);
+
+/* create machine code for line with one operand */
 void compile_instruction_line_one_operand(char *args_line, char *command, SymbolPtr *symbol_head, InstructionPtr *instruction_head,
 int *ic);
+
+/* create machine code for line with two operands */
 void compile_instruction_line_two_operands(char *args_line, char *command, SymbolPtr *symbol_head, InstructionPtr *instruction_head,
 int *ic);
+
+/* create machine code for an operand in the first pass, if possible. 
+if not, binary code of 0 will be saved and revalued in the second pass */
 void compile_operand(char *operand, InstructionPtr *instruction_head, int *ic);
+
+/* code the A_R_E bits to a word */
 void code_are(unsigned long int *command, char a_r_e);
+
+/* code the funct value to a word */
 void code_funct(unsigned long int *command, char *command_name);
+
+/* code the opcode value to a word */
 void code_opcode(unsigned long int *command, char *command_name);
+
+/* code the addressing method and number of register to a word */
 void code_addressing_and_register(unsigned long int *command, char *operand, int src_or_dest);
 
 
-/* creating files */
+/* end of declarations of functions in compile_commands.c */
+
+
+
+
+/* declarations of functions in create_files.c */
+
+
+/* create object file, extern file and entry file */
 void create_files(SymbolPtr head_symbol, ExternPtr head_extern, InstructionPtr head_instruction,
 DataPtr head_data, int ic, int dc, char *file_name);
+
+/* creates an object file */
 void create_object_file(InstructionPtr head_instruction, DataPtr head_data, int ic, int dc, char *file_name);
+
+/* creates an entry file if entry labels exist */
 void create_entry_file(SymbolPtr head_symbol, char *file_name);
+
+/* creates an extern file if an extern label exists */
 void create_extern_file(ExternPtr head_extern, SymbolPtr head_symbol, char *file_name);
+
+/* add a suffix to a file according to the requested suffix: '.as', '.ob', '.ent', '.ext' */
+int add_suffix_to_file(char *file_name, char *file_name_with_suffix, int suffix);
+
+
+/* end of declarations of functions in create_files.c */
+
+
 
 /* second pass */
 void parse_line_second_pass(char *line, int *error_in_file, SymbolPtr *symbol_head, ExternPtr *extern_head,
