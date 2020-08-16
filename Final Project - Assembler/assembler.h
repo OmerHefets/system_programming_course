@@ -124,6 +124,8 @@ typedef struct data_file {
 } DataFile;
 
 
+
+
 /* declarations of functions in assembler.c */
 
 
@@ -148,6 +150,7 @@ DataPtr *head_data);
 
 
 /* end of declarations of functions in assembler.c */
+
 
 
 
@@ -292,7 +295,11 @@ void print_extern_list(ExternPtr head);
 
 
 
-/* parsing error checking */
+
+
+/* declarations of functions in parsing_error_checking.c */
+
+
 int check_correct_label(char *str);
 int check_correct_register(char *str);
 int check_command_exists(char *str);
@@ -304,32 +311,75 @@ int check_extern_argument(char *line);
 int check_instruction_arguments(char *line, char *command);
 int check_one_operand_in_instruction(char *line, char *command);
 int check_two_operands_in_instruction(char *line, char *command);
+int is_legal_filename_length(char *file_name);
+int is_legal_operand_type(int *optional_operands, int operand_type);
 
-/* parsing */
+
+/* end of declarations of functions in parsing_error_checking.c */
+
+
+
+
+
+/* declarations of functions in first_pass.c */
+
+
+/* analyze the first buffer found in a line */
 int analyze_first_buffer(char *token, char *label, int *error_in_file, int corrent_line, char *file_name);
+
+/* parses the first token in a line and decides the type of the line for further parsing and error checking */
 void parse_line_first_pass(char *line, int *error_in_file, SymbolPtr *symbol_head, ExternPtr *extern_head,
 InstructionPtr *instruction_head, DataPtr *data_head, int *dc, int *ic, int corrent_line, char *file_name);
+
+/* parse a line of string or data command */
 void parse_string_or_data_line(char *label, char *command, int label_flag, SymbolPtr *symbol_head,
 DataPtr *data_head, int* error_in_file, int *dc, char *line, int index_of_arguments, int corrent_line, char *file_name);
+
+/* parse a data line */
 void parse_data_line(char *line, int index_of_arguments, DataPtr *data_head, int* error_in_file, int *dc, 
 int corrent_line, char *file_name);
+
+/* parse a string line */
 void parse_string_line(char line[], int index_of_arguments, DataPtr *data_head, int* error_in_file, int *dc, 
 int corrent_line, char *file_name);
+
+/* parse a line with an extern or an entry command. ignore labels in these commands */
 void parse_entry_or_extern_line(char *command, ExternPtr *extern_head, SymbolPtr *symbol_head, int* error_in_file,
 char *line, int index_of_arguments, int corrent_line, char *file_name);
+
+/* parse extern line */
 void parse_extern_line(char *line, int index_of_arguments, ExternPtr *extern_head, SymbolPtr *symbol_head,
 int *error_in_file, int corrent_line, char *file_name);
+
+/* parse an operation line with its arguments */
 void parse_operation_line(char *label, char *command, int label_flag, SymbolPtr *symbol_head, InstructionPtr *instruction_head, 
 int* error_in_file, int *ic, char *line, int index_of_arguments, int corrent_line, char *file_name);
-int is_legal_filename_length(char *file_name);
 
 
-/* helper functions? */
+/* end of declarations of functions in first_pass.c */
+
+
+
+
+
+/* declarations of functions in helper_functions.c */
+
+
+/* get command index by the definition in defined_data_structures.c */
 int get_command_index(char *command);
+
+/* get register index by the definition in defined_data_structures.c */
 int get_register_index(char *reg);
+
+/* check the addressing type of an operand */
 int get_operand_type(char *operand);
+
+/* get a long number from a string that represents a number in the zero addressing method */
 long get_number_from_operand_adressing_zero(char *operand);
-int is_legal_operand_type(int *optional_operands, int operand_type);
+
+
+/* end of declarations of functions in helper_functions.c */
+
 
 
 
@@ -373,6 +423,7 @@ void code_addressing_and_register(unsigned long int *command, char *operand, int
 
 
 
+
 /* declarations of functions in create_files.c */
 
 
@@ -397,7 +448,12 @@ int add_suffix_to_file(char *file_name, char *file_name_with_suffix, int suffix)
 
 
 
-/* second pass */
+
+
+/* declarations of functions in second_pass.c */
+
+
+
 void parse_line_second_pass(char *line, int *error_in_file, SymbolPtr *symbol_head, ExternPtr *extern_head,
 InstructionPtr *instruction_head, DataPtr *data_head, int *ic, int corrent_line, char *file_name);
 int analyze_first_buffer_second_pass(char *token);
@@ -411,3 +467,6 @@ void instruction_line_two_operands_second_pass(char *args_line, char *command, S
 ExternPtr *extern_head ,int *error_in_file, int *ic, int corrent_line, char *file_name);
 void compile_operand_second_pass(char *operand, InstructionPtr instruction_head, SymbolPtr symbol_head,
 ExternPtr *extern_head, int *error_in_file, int *ic, int corrent_line, char *file_name);
+
+
+/* end of declarations of functions in second_pass.c */
