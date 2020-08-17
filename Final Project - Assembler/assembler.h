@@ -300,18 +300,44 @@ void print_extern_list(ExternPtr head);
 /* declarations of functions in parsing_error_checking.c */
 
 
+/* check if a token is a correct label */
 int check_correct_label(char *str);
+
+/* check if a token has a name of a defined register (r0-r7) */
 int check_correct_register(char *str);
+
+/* check if a token exists as a valid command from the defined data operations and opcodes */
 int check_command_exists(char *str);
+
+/* check that requested amount of commas exist in the line, and that valid amount of arguments exits between each set of commas */
 int check_number_of_commas(char *s, int requested_amount);
+
+/* check that all data arguments after .data operation are valid */
 int check_data_arguments(char *line);
+
+/* check a single data argument - if he's written correctly */
 int check_data_argument(char *arg);
+
+/* check that a string argument is valid */
 int check_string_argument(char *line);
+
+/* check that an extern agrument is a valid argument */
 int check_extern_argument(char *line);
+
+/* check if instruction arguments are valid to a generic instruction */
 int check_instruction_arguments(char *line, char *command);
+
+/* check that a single operand in line is valid to that command */
 int check_one_operand_in_instruction(char *line, char *command);
+
+/* check that two operands in a line are valid to that command */
 int check_two_operands_in_instruction(char *line, char *command);
+
+/* is filename length is of the defined length (predefined in the header file) */
 int is_legal_filename_length(char *file_name);
+
+/* get the optional operands from predefined possible operands for this operand, and check if the type matches the possible operands 
+for example, if in "add" opcode the operand is of type 0,1 or 3. */
 int is_legal_operand_type(int *optional_operands, int operand_type);
 
 
