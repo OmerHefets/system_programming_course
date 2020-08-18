@@ -21,7 +21,7 @@ InstructionPtr *instruction_head, DataPtr *data_head, int *dc, int *ic, int corr
     if it's a label, the optional label will store that label */
     buffer_type = analyze_first_buffer(token, optional_label, error_in_file, corrent_line, file_name);
     if (buffer_type ==  EMPTY_OR_COMMENT || buffer_type == UNDEFINED){
-        return; /* skip if comment */
+        return; /* skip if comment. if it gets the UNDIFINED VALUE, the error was already defined in the buffer analysis. */
     }
     if (buffer_type == LABEL) { /* if its a label, read another token that needs to be a command*/
         label_flag = TRUE; /* turn label flag to TRUE */
@@ -100,7 +100,10 @@ int corrent_line, char *file_name)
     if (check_data_arguments(line_copy) == TRUE) { /* if data arguments are valid, add them to the data list */
         token = strtok(line+index_of_arguments, delim);
         while (token != NULL) {
-            add_data(data_head, *dc, atol(token));
+            /* important implementation note: data will be added to the data list as defined in the number,
+            but only the first 24 bits will be used later and printed to the user.
+            large numbers with more than 24 bits will lose their most left bits. */
+            add_data(data_head, *dc, atol(token)); 
             token = strtok(NULL, delim);
             (*dc)++;
         }

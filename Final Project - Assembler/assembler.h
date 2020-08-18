@@ -479,18 +479,30 @@ int add_suffix_to_file(char *file_name, char *file_name_with_suffix, int suffix)
 /* declarations of functions in second_pass.c */
 
 
-
+/* parses the first token in a line and analyzes it for further parsing */ 
 void parse_line_second_pass(char *line, int *error_in_file, SymbolPtr *symbol_head, ExternPtr *extern_head,
 InstructionPtr *instruction_head, DataPtr *data_head, int *ic, int corrent_line, char *file_name);
+
+/* analyze the first buffer found in a line (for the second pass, with less error checking) */
 int analyze_first_buffer_second_pass(char *token);
+
+/* parse an entry line and add its entry val to the required label */
 void parse_entry_line_second_pass(SymbolPtr head_symbol, int *error_in_file, char *line, int index_of_arguments, 
 int corrent_line, char *file_name);
+
+/* get an instruction line and compile its arguments according to the command */
 void compile_instruction_line_second_pass(char *args_line, char *command, SymbolPtr symbol_head,
 InstructionPtr instruction_head, ExternPtr *extern_head, int *error_in_file, int *ic, int corrent_line, char *file_name);
+
+/* parse and code a command line with one argument */
 void instruction_line_one_operand_second_pass(char *args_line, char *command, SymbolPtr symbol_head, InstructionPtr instruction_head,
 ExternPtr *extern_head, int *error_in_file ,int *ic, int corrent_line, char *file_name);
+
+/* parse and code a command line with two arguments */
 void instruction_line_two_operands_second_pass(char *args_line, char *command, SymbolPtr symbol_head, InstructionPtr instruction_head,
 ExternPtr *extern_head ,int *error_in_file, int *ic, int corrent_line, char *file_name);
+
+/* gets an operand and codes it to machine code if needed */
 void compile_operand_second_pass(char *operand, InstructionPtr instruction_head, SymbolPtr symbol_head,
 ExternPtr *extern_head, int *error_in_file, int *ic, int corrent_line, char *file_name);
 
