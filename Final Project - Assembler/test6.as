@@ -1,4 +1,6 @@
-; test first pass errors in arguments or incorrect lines
+; test 6: first pass errors in arguments or incorrect lines
+; we assume maxline input of 80 chars
+
 
 . entry LIST
  .ext ern W

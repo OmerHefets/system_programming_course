@@ -78,7 +78,8 @@ DataPtr *head_data, int *dc, int *ic, int *errors_in_file, char *file_name)
     char command_line[MAX_LINE];
     int corrent_line = FIRST_LINE;
     /* parse lines until we reach the end of the file */
-    while(fgets(command_line, MAX_LINE, ifp) != NULL) {
+    while(fgets(command_line, MAX_LINE, ifp) != NULL) { /* note: we assume that maxline is indeed 80 chars inline 
+    we do not check length of line since it was defined in our assembly program. */
         parse_line_first_pass(command_line, errors_in_file, head_symbol, head_extern, head_instruction,
         head_data, dc, ic, corrent_line, file_name);
         corrent_line++; /* count line number for error checking */
