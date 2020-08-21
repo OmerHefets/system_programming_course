@@ -1,4 +1,5 @@
 /**
+ * Assembler program by Omer Hefets in System Programming course 20465 - August 2020.
  * This is the main module of the program. in this modules are defined all the functions for the assembler pipeline:
  * compiling multiple files, then on each file applying the first and the second pass, then free the memory of the linked lists.
  */
@@ -27,7 +28,7 @@ void compile_multiple_files(int argc, char *argv[])
         /* add suffix returns FALSE if filename is longer that the MAX defined (30 char without suffix).
         if the length is correct, it will add the ".as" suffix and procceed */
         if(!add_suffix_to_file(*++argv, file_name, FILENAME_SUFFIX)) { 
-            fprintf(stdout, "%s: can't open %s because file name is too long", prog_name, *argv);
+            fprintf(stdout, "%s: can't open %s because file name is too long.\n", prog_name, *argv);
         }
         /* check opening for the file for both pointers */
         else if (((ifp_first_pass = fopen(file_name, "r")) == NULL) || ((ifp_second_pass = fopen(file_name, "r")) == NULL)) {
